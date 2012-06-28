@@ -3,6 +3,7 @@
     width:960px;
     height:471px;
     padding:0px;
+    float:left;
     position:relative;
 }
 #nex_request tbody{
