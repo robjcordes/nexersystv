@@ -1,8 +1,5 @@
-// JavaScript Document
-
-<script type="text/javascript">
-	piAId = '11292';
-	piCId = '16621';
+        var piAId = '11292';
+	var piCId = '16621';
 	
 	(function() {
 		function async_load(){
@@ -13,4 +10,3 @@
 		if(window.attachEvent) { window.attachEvent('onload', async_load); }
 		else { window.addEventListener('load', async_load, false); }
 	})();
-</script>

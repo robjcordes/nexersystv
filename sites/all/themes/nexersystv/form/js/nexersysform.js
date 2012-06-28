@@ -18,21 +18,21 @@ $(document).ready(function() {
          *
          */
         homeUrls : [
-    	'http://nexersysnow.com/node/7', 
-        'http://nexersysnow.localhost:8888/node/7',
-        'http://nexersysnow.principlepointdev.com/node/7',
+    	'http://nexersystv.com/node/8', 
+        'http://www.nexersystv.localhost:8888/node/8',
+        'http://nexersystv.principlepointdev.com/node/8',
 
     	],
     commercialUrls : [
-        //'http://nexersysnow.com/node/6',
-        'http://nexersysnow.localhost:8888/node/6',
-        'http://nexersysnow.principlepointdev.com/node/6',
+    	'http://nexersystv.com/node/9', 
+        'http://www.nexersystv.localhost:8888/node/9',
+        'http://nexersystv.principlepointdev.com/node/9',
 
 		],
     proUrls : [
-        'http://nexersysnow.com/node/8',
-        'http://nexersysnow.localhost:8888/node/8',
-        'http://nexersysnow.principlepointdev.com/node/8',
+    	'http://nexersystv.com/node/10', 
+        'http://www.nexersystv.localhost:8888/node/10',
+        'http://nexersystv.principlepointdev.com/node/10',
 		],
     hiddenCommInput : "<input type='hidden' name='xnQsjsdp' value='dhOYVrEbdmJthYo*kRl79w$$'><input type='hidden' name='xmIwtLD' value='xxtEl*Hx2ByNU*uyPq3OMHBogz4VdScW'><input type='hidden' name='actionType' value='TGVhZHM='><input type='hidden' name='returnURL' value='http://www.nexersys.com/thank-you'>",
     hiddenHomeInput : "<input type='hidden' name='xnQsjsdp' value='f1LzxolSe-0$'><input type='hidden' name='xmIwtLD' value='82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O'><input type='hidden' name='actionType' value='TGVhZHM='><input type='hidden' name='returnURL' value='http://www.nexersys.com/thank-you'>",
