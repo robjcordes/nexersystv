@@ -1,0 +1,12 @@
+name = Social Share
+description = "Adds configurable social network share links to nodes."
+core = 7.x
+files[] = social_share.module
+files[] = social_share.admin.inc
+
+; Information added by drupal.org packaging script on 2011-05-27
+version = "7.x-1.10"
+core = "7.x"
+project = "social-share"
+datestamp = "1306517517"
+

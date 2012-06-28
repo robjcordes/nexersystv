@@ -1,0 +1,156 @@
+/* This file will hold styles for the mobile version of your website (mobile first). */
+/* This also can include ANY global CSS that applies site-wide. Unless overwritten by a more specific style rule, CSS declarations in global.css will apply site-wide. */
+
+p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+margin-bottom: 0px;
+}
+
+#region-content {
+
+}
+
+#section-content {
+
+}
+
+#zone-branding {
+	margin-top:20px;
+	padding-top: 10px;
+	background-color:white;
+}
+.zone-content{
+	background-color:#009999;
+	}
+
+#zone-menu, #zone-content, #zone-postscript {
+	background-color:white;
+}
+
+#container-12 {
+background-color: white;
+-moz-box-shadow: 0px 0px 6px #000;
+-webkit-box-shadow: 0px 0px 6px #000;
+box-shadow:  0px 0px 6px #000;
+}
+
+
+body {
+	background-color:	#edefef;}
+	
+	#brochureleftcopy {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	color: #FFF;
+	line-height: 22px;
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	font-style: normal;
+	font-weight: normal;
+}
+#Brochureleftcontainer {
+	background-image:url(/sites/default/files/orange-bkg.png);
+	height: 381px;
+	width: 460px;
+}
+
+#brochurerightcopy {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFF;
+	line-height: 22px;
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	font-style: normal;
+	font-weight: normal;
+}
+
+#region-sidebar-first{
+	padding-bottom:10px;
+	padding-top:10px;
+}
+
+
+h2 {
+display: block;
+font-size: 1.5em;
+-webkit-margin-before: 0.0em!important;
+-webkit-margin-after: 0.0em!important;
+-webkit-margin-start: 0px!important;
+-webkit-margin-end: 0px!important;
+font-weight: bold;
+}
+
+.nexersys-sidebar {
+}
+
+.nexersys-content {
+padding-top: 10px;
+height: 390px;
+}
+
+.block-block-6 {
+padding-top: 10px;
+}
+
+.zero-down-content, .brochure-content {
+	top: -10px;
+}
+
+#zone-postscript{
+	background-color:white;
+	padding-bottom:10px;
+}
+
+tr:hover td,
+tr.even:hover td.active,
+tr.odd:hover td.active {
+  background: transparent;
+
+}
+
+table {
+border: 0px solid #CCC;
+width: 100%;
+}
+
+#brochurerightcopy .submit{
+		background-image:url(/sites/default/files/request-now-button.png);
+		cursor:pointer;
+    width: 260px;
+    height: 59px;
+    border: none;
+	display: block;
+text-indent: -9999em;
+text-transform: uppercase; 
+margin-top:10px;
+}
+
+#brochurerightbottomcopy {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFF;
+	line-height: 22px;
+	padding-top: 0px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	font-style: normal;
+	font-weight: normal;
+}
+#big-movie-block {
+	background-color: #000;
+	height: 381px;
+	width: 700px;
+	position: relative;
+	top: -20px;
+}
+#moviecontainer {
+	height: 360px;
+	width: 640px;
+	padding-top: 10px;
+	padding-left: 30px;
+}
