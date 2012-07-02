@@ -1,0 +1,90 @@
+<?php
+
+function nexersys_landing_permission() {
+  return array(
+    'access nexersystv' => array(
+      'title' => t('Access Nexersystv'),
+      'description' => t('Basic access to site for anons'),
+      'restrict access' => FALSE,
+    ),
+  );
+}
+
+/**
+* Implementation of hook_menu()
+*/
+
+function nexersys_landing_menu(){
+    $items['admin/nexersys-form'] = array(
+    'title' => 'Landing page control',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('access nexersystv'),
+    'page arguments' => array('landing_form'),      
+  );
+
+return $items;
+
+}
+
+function landing_form($form, &$form_state){
+    $form['#prefix'] = '<div id="nex_request">    <div class="left">
+        <div class="left-top">
+            <div><img src="/sites/all/themes/nexersystv/form/img/nex-bro-home.png"/></div>
+        </div>
+        <div class="left-bottom">
+            <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
+        </div>
+    </div>
+    <div class="right">';
+    $form['#method'] = 'post';
+    $form['#action'] = 'https://crm.zoho.com/crm/WebToLeadForm';
+    $form['LEADCF13'] = array(
+        '#type' => 'hidden',
+        '#value' => 'NexersysNow.com Ebrochure Form',
+    );
+    $form['LEADCF14'] = array(
+        '#type' => 'hidden',
+        '#value' => 'http://nexersysNow.com/ebrochure',
+    );
+    $form['LEADCF1'] = array(
+        '#type' => 'hidden',
+        '#value' => 'NexersysNow.com Ebrochure Form',
+    );
+    $form['LEADCF5'] = array(
+        '#type' => 'hidden',
+        
+        '#value' => 'http://nexersysNow.com/ebrochure',
+    );
+    $form['First Name'] = array(
+        '#type' => 'textfield', 
+        '#title' => 'First Name',
+        '#required' => true,
+        '#attributes' => array('class' => array('nexersys validate[required]'),)
+    );
+    $form['Last Name'] = array(
+        '#type' => 'textfield', 
+        '#title' => 'Last Name',
+        '#required' => true,
+        '#attributes' => array('class' => array('nexersys validate[required]'),)
+    );
+    $form['Phone'] = array(
+        '#type' => 'textfield', 
+        '#title' => 'Phone Number',
+        '#required' => true,
+        '#attributes' => array('class' => array('nexersys validate[required]'),)
+    );
+
+
+    
+    
+    $form['#suffix'] = '</div></div>';
+    
+    return $form;
+}
+
+function nexersys_landing_preprocess_page(&$vars){
+    drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/validationEngine.jquery.css');
+    drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/nex_request.css');
+    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine-en.js');
+    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine.js');
+}

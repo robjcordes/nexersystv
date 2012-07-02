@@ -1,0 +1,95 @@
+#nex_request{
+    font-family:Arial,Helvetica,Georgia,Sans-serif;
+    width:960px;
+    height:471px;
+    padding:0px;
+    float:left;
+    position:relative;
+}
+#nex_request tbody{
+    border:none;
+}
+#nex_request tr td, #nex_request tr th{
+    background:none;
+    padding:0;
+    border:none;
+}
+#nex_request input, #nex_request select{
+    font-size:16px;
+    padding:0;
+    margin:3px;
+}
+#nex_request input{
+    width:200px;
+}
+#nex_request select{
+    width:207px;
+}
+#nex_request tr{
+    background:none;
+}
+#nex_request .left{
+    float:left;
+    width:456px;
+    height:471px;
+}
+#nex_request .left-top{
+    height:299px;
+}
+#nex_request .left-bottom{
+    background:url('/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png');
+    float:left;
+    clear:left;
+    height:172px;
+}
+
+#nex_request .right{
+    float:left;
+    background:url('/sites/all/themes/nexersystv/form/img/nex-right-box3.png');
+    height: 471px;
+    width:484px;
+	margin-bottom: 10px;
+}
+
+#nex_request_form .submit{
+    background: url("/sites/all/themes/nexersystv/form/img/request-but-up.png") repeat scroll 0 0 transparent;
+    border: medium none;
+    height: 59px;
+    margin-left: 111px;
+    position: absolute;
+    top: 320px;
+    width: 258px;
+}
+#nex_request_form .down{
+    background:url('/sites/all/themes/nexersystv/form/img/request-but-down.png');
+}
+#nex_request .hidden{
+    display:none;
+}
+#nex_request label{
+    color:white;
+}
+#nex_request table{
+    border-collapse:collapse;
+border:none;
+    font-size:16px !important;
+    margin: 10px 0px 0px 15px;
+}
+#nex_request_form .label{
+    padding-right:10px;
+}
+#nex_request_form td.label {
+    vertical-align:top;
+    text-align:right;
+    line-height:28px;
+}
+#nex_request_form tr{
+    margin-bottom:10px;
+}
+#nex_request_form textarea{
+    height:70px;
+width:207px;
+}
+#Questions{
+    resize:none;
+}
