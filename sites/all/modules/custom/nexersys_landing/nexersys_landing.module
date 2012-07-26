@@ -51,9 +51,9 @@ function nexersys_landing_theme() {
  * Implements hook_node_view().
  */
 function nexersys_landing_node_view($node, $view_mode) {
-    print '<pre style="font-size:11px;color:green;">';
-    print_r($node);
-    print '</pre>';
+    //print '<pre style="font-size:11px;color:green;">';
+    //print_r($node);
+    //print '</pre>';
     $variables = array();
 $form = drupal_get_form('campaign_landing_form');
     
