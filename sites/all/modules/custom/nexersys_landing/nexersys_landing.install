@@ -1,0 +1,121 @@
+<?php
+function nexersys_landing_install() {
+    $t = get_t();
+
+    $node_campaign = array(
+        'type' => 'campaign',
+        'name' => $t('Campaign'),
+        'base' => 'node_content',
+        'description' => $t('An individual campaign created by nexersys staff for unique landing forms.'),
+        'has_body' => FALSE,
+        //'has_title' => FALSE,
+    );
+
+  
+  // http://api.drupal.org/api/function/node_type_set_defaults/7
+  $content_type = node_type_set_defaults($node_campaign);
+  //node_add_body_field($content_type);
+
+  
+// Save the content type
+    node_type_save($content_type);
+    $fields = array(
+        array(    
+            'field_name' => 'field_camp_src', 
+            'type' => 'text',
+        ),
+        array(
+            'field_name' => 'field_camp_type', 
+            'type' => 'list_text', 
+            'settings' => array(
+                'allowed_values_function' => '_camp_types',
+            ),
+        ),
+        array(
+            'field_name' => 'field_camp_phone', 
+            'type' => 'text',
+        ),
+        array(
+            'field_name' => 'field_camp_thank_url', 
+            'type' => 'text',
+        ),
+        array(
+            'field_name' => 'field_camp_offer_txt', 
+            'type' => 'text',
+        ),
+    );
+    foreach($fields as $key=>$value){
+        field_create_field($value);
+    }
+    $instances = array(
+        array(
+            'field_name' => 'field_camp_src', 
+            'entity_type' => 'node', 
+            'label' => 'Campaign Source', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),
+        ),
+        array(
+            'field_name' => 'field_camp_thank_url', 
+            'entity_type' => 'node', 
+            'label' => 'Campaign Thank You Page URL', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),
+        ),
+        array(
+            'field_name' => 'field_camp_type', 
+            'entity_type' => 'node', 
+            'label' => 'Campaign Type', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'active' => 1,
+                'module' => 'options',
+                'type' => 'options_select',
+                'settings' => array(),
+            ),   
+        ),
+        array(
+            'field_name' => 'field_camp_phone', 
+            'entity_type' => 'node', 
+            'label' => 'Campaign Phone Number', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),  
+        ),
+                array(
+            'field_name' => 'field_camp_offer_txt', 
+            'entity_type' => 'node', 
+            'label' => 'Campaign Offer Text', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),  
+        ),
+    );
+    foreach($instances as $key=>$value){
+        field_create_instance($value);
+    }
+
+
+}
+
+
+function nexersys_landing_uninstall(){
+    field_delete_field('field_camp_src');
+        field_delete_field('field_camp_type');
+        field_delete_field('field_camp_phone');
+        field_delete_field('field_camp_thank_url');
+        field_delete_field('field_camp_offer_txt');
+
+}
+?>

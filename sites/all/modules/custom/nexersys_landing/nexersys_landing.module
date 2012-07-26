@@ -1,5 +1,4 @@
 <?php
-
 function nexersys_landing_permission() {
   return array(
     'access nexersystv' => array(
@@ -25,7 +24,19 @@ function nexersys_landing_menu(){
 return $items;
 
 }
+function nexersys_landing_field_formatter_info(){
 
+}
+function _camp_types(){
+    //$options = array(0=>'Unknown', 1=>'Commercial', 2=>'Home', 3=>'Pro',);
+        $options = array(0=>'Unknown', 1=>'Commercial', 2=>'Home', 3=>'Pro',);
+debug($options);
+    return $options;
+}
+function nexersys_landing_init(){
+    //debug(field_info_fields());
+    //debug(field_info_instance('node', 'field_test', 'campaign'));
+}
 function landing_form($form, &$form_state){
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
         <div class="left-top">
