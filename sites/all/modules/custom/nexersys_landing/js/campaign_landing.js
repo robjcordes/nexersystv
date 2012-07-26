@@ -1,10 +1,10 @@
 var $ = jQuery.noConflict();
 $(document).ready(function() {
-    $("#nex_request_form").validationEngine('attach'); // set up form validation.
-    $('#nex_request_form .submit').hover(function(){
+    $("#campaign-landing-form").validationEngine('attach'); // set up form validation.
+    $('#campaign-landing-form .submit').hover(function(){
         $(this).toggleClass('down');
     });
-    $('#nex_request_form .submit').click(function(event){
+    $('#campaign-landing-form .submit').click(function(event){
         var country = $('#nex_request form #nex_request_country').val();
         nexReqForm.updateAction(country, nexReqForm.urlType);
         //nexReqForm.showTestAlerts();
@@ -76,7 +76,7 @@ $(document).ready(function() {
     formNameComm : "WebToLeads582065000000070015",
     companyNameInput : "<tr class='company_name'><td class='label'><label for='CompanyName'>Company Name*</label></td><td><input class='nexersys validate[required]' id='CompanyName' type='text' maxlength='255' name='LEADCF24' /></td></tr>",
     showTestAlerts : function(){
-        var formValues = 'form name: ' + $('#nex_request_form').attr('name')
+        var formValues = 'form name: ' + $('#campaign-landing-form').attr('name')
             + '\n URL Type: ' + nexReqForm.urlType
             + '\n Model Type: ' + nexReqForm.modelType
             + '\n Country: ' + $('#nex_request form #nex_request_country').val()
@@ -175,8 +175,8 @@ $(document).ready(function() {
                    },
     formatForm : function(){
 		//console.log(this.urlType);
-		$('#nex_request_form br').remove();
-		var formHTML = $('#nex_request_form').html();
+		$('#campaign-landing-form br').remove();
+		var formHTML = $('#campaign-landing-form').html();
 		formHTML.replace('<p></p>', '');
 		formHTML.replace('<p>', '');
 		formHTML.replace('</p>', '');
@@ -190,13 +190,13 @@ $(document).ready(function() {
                          $('[name=LEADCF3]').addClass('hidden').val('home');
                          $('#nex_request .left-top img').attr('src', 'http://nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-home.png');
                      }else if(this.urlType == 'commercial'){
-						$('#nex_request_form textarea').css({'height':'45px'});
+						$('#campaign-landing-form textarea').css({'height':'45px'});
 						
 						$(this.companyNameInput).insertAfter('#nex_request table tr:eq(2)');
 						//if($(location).attr('href') == 'http://nexersys.com/commercial-test/'){
 								if($.browser.msie && $.browser.version == 7.0){
 									//console.log('ie 7');
-									$('#nex_request_form .submit').css({'margin-top':'-45px'});
+									$('#campaign-landing-form .submit').css({'margin-top':'-45px'});
 								}else if($.browser.msie && $.browser.version == 8.0){
 									//console.log('ie 8');
 								}else{
@@ -220,5 +220,5 @@ $(document).ready(function() {
 
     nexReqForm.checkUrlType();
     nexReqForm.formatForm();
-	$("#nex_request_form").validationEngine('attach'); //This needs to be here since we're adding form elements after the page has been rendered and initially validated, just re-validating.
+	$("#campaign-landing-form").validationEngine('attach'); //This needs to be here since we're adding form elements after the page has been rendered and initially validated, just re-validating.
 });

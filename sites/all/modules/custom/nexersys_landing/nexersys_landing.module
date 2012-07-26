@@ -18,7 +18,7 @@ function nexersys_landing_menu(){
     'title' => 'Landing page control',
     'page callback' => 'drupal_get_form',
     'access arguments' => array('access nexersystv'),
-    'page arguments' => array('landing_form'),      
+    'page arguments' => array('campaign_landing_form'),      
   );
 
 return $items;
@@ -32,7 +32,6 @@ function _camp_types(){
     return $options;
 }
 function nexersys_landing_init(){
- //print theme('nexersys_landing_form', array('jarjar' => 'binx!'));
 }
 /**
  * Implements hook_theme().
@@ -52,10 +51,12 @@ function nexersys_landing_theme() {
  * Implements hook_node_view().
  */
 function nexersys_landing_node_view($node, $view_mode) {
-    //print '<pre style="font-size:11px;color:green;">';
-    //print_r($node);
-    //print '</pre>';
-    $form = drupal_get_form('landing_form');
+    print '<pre style="font-size:11px;color:green;">';
+    print_r($node);
+    print '</pre>';
+    $variables = array();
+$form = drupal_get_form('campaign_landing_form');
+    
     // Add the output to the node.
     $node->content['nexersys_landing'] = array(
         '#theme' => 'nexersys_landing_view',
@@ -76,7 +77,7 @@ function nexersys_landing_preprocess_node(&$vars){
     //debug($vars);
 }
 
-function landing_form(){
+function campaign_landing_form($variables){
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
         <div class="left-top">
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-bro-home.png"/></div>
@@ -85,7 +86,7 @@ function landing_form(){
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
         </div>
     </div>
-    <div class="right">';
+    <div class="right"><table>';
     $form['#method'] = 'post';
     $form['#action'] = 'https://crm.zoho.com/crm/WebToLeadForm';
     $form['LEADCF13'] = array(
@@ -102,30 +103,45 @@ function landing_form(){
     );
     $form['LEADCF5'] = array(
         '#type' => 'hidden',
-        
         '#value' => 'http://nexersysNow.com/ebrochure',
     );
     $form['First Name'] = array(
+        '#prefix' => t('<tr><td>Phone Number</td><td>'),
         '#type' => 'textfield', 
         '#title' => 'First Name',
         '#required' => true,
-        '#attributes' => array('class' => array('nexersys validate[required]'),)
+        '#attributes' => array('class' => array('nexersys validate[required]'),),
+        '#title_display' => 'invisible',
+        '#suffix' => t('</td></tr>'),
     );
     $form['Last Name'] = array(
+        '#prefix' => t('<tr><td>Phone Number</td><td>'),
         '#type' => 'textfield', 
         '#title' => 'Last Name',
         '#required' => true,
-        '#attributes' => array('class' => array('nexersys validate[required]'),)
+        '#attributes' => array('class' => array('nexersys validate[required]'),),
+        '#title_display' => 'invisible',
+        '#suffix' => t('</td></tr>'),
     );
     $form['Phone'] = array(
+        '#prefix' => t('<tr><td>Phone Number</td><td>'),
         '#type' => 'textfield', 
         '#title' => 'Phone Number',
         '#required' => true,
-        '#attributes' => array('class' => array('nexersys validate[required]'),)
+        '#attributes' => array('class' => array('nexersys validate[required]'),),
+        '#title_display' => 'invisible',
+        '#suffix' => t('</td></tr>'),
     );
-    
-    $form['#suffix'] = '</div></div>';
-    
+    $form['submit'] = array(
+                '#prefix' => t('<tr><td></td><td>'),
+
+        '#type' => 'image_button',
+        '#src' => drupal_get_path('module', 'nexersys_landing') . '/img/request-but-up.png',
+                '#suffix' => t('</td></tr>'),
+
+        
+    );
+    $form['#suffix'] = '</table></div></div>';
     return $form;
 }
 
@@ -134,4 +150,5 @@ function nexersys_landing_preprocess_page(&$vars){
     drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/nex_request.css');
     drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine-en.js');
     drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine.js');
+    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_landing.js');
 }
