@@ -28,16 +28,55 @@ function nexersys_landing_field_formatter_info(){
 
 }
 function _camp_types(){
-    //$options = array(0=>'Unknown', 1=>'Commercial', 2=>'Home', 3=>'Pro',);
-        $options = array(0=>'Unknown', 1=>'Commercial', 2=>'Home', 3=>'Pro',);
-debug($options);
+    $options = array(0=>'Unknown', 1=>'Commercial', 2=>'Home', 3=>'Pro',);
     return $options;
 }
 function nexersys_landing_init(){
-    //debug(field_info_fields());
-    //debug(field_info_instance('node', 'field_test', 'campaign'));
+ //print theme('nexersys_landing_form', array('jarjar' => 'binx!'));
 }
-function landing_form($form, &$form_state){
+/**
+ * Implements hook_theme().
+ */
+function nexersys_landing_theme() {
+    $theme = array(
+        'nexersys_landing_view' => array(
+            'render element' => 'nexersys_landing',
+            //'path' => drupal_get_path('module', 'nexersys_landing') . '/templates',
+            //'template' => 'nexersys-landing-form',
+            //'variables' => array('form' => NULL,),
+            ),
+    );
+    return $theme;
+}
+/**
+ * Implements hook_node_view().
+ */
+function nexersys_landing_node_view($node, $view_mode) {
+    //print '<pre style="font-size:11px;color:green;">';
+    //print_r($node);
+    //print '</pre>';
+    $form = drupal_get_form('landing_form');
+    // Add the output to the node.
+    $node->content['nexersys_landing'] = array(
+        '#theme' => 'nexersys_landing_view',
+        //'#node' => $node,
+        //'#teaser' => $teaser,
+        //'#page' => $page,
+        '#form' => $form,
+  );
+}
+function theme_nexersys_landing_view($variables){
+    
+    return drupal_render($variables['nexersys_landing']['#form']);
+
+}
+
+function nexersys_landing_preprocess_node(&$vars){
+    
+    //debug($vars);
+}
+
+function landing_form(){
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
         <div class="left-top">
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-bro-home.png"/></div>
@@ -84,9 +123,6 @@ function landing_form($form, &$form_state){
         '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),)
     );
-
-
-    
     
     $form['#suffix'] = '</div></div>';
     
