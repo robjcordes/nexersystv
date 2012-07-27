@@ -4,11 +4,11 @@ $(document).ready(function() {
     $('#campaign-landing-form .submit').hover(function(){
         $(this).toggleClass('down');
     });
-    $('#campaign-landing-form .submit').click(function(event){
+    $('#campaign-landing-form .form-submit').click(function(event){
         var country = $('#nex_request form #nex_request_country').val();
         nexReqForm.updateAction(country, nexReqForm.urlType);
-        //nexReqForm.showTestAlerts();
-        //return false;
+        nexReqForm.showTestAlerts();
+        return false;
     });
 
     nexReqForm = {
@@ -108,7 +108,7 @@ $(document).ready(function() {
             $('#nex_request form').attr('name', this.formNameHome);
             $('#nex_request table').prepend(this.hiddenHomeInput);
             $('#nex_request #model_type').attr('name', 'LEADCF15');
-			$('#nex_request #CompanyName').attr('name', 'LEADCF29');
+            $('#nex_request #CompanyName').attr('name', 'LEADCF29');
             $('#nex_request #nex_request_country').attr('name', 'LEADCF23');
             $('#nex_request #questions').attr('name', 'LEADCF28');
         }else{

@@ -13,6 +13,7 @@
     background:none;
     padding:0;
     border:none;
+    color:white;
 }
 #nex_request input, #nex_request select{
     font-size:16px;
@@ -66,9 +67,7 @@
 #nex_request .hidden{
     display:none;
 }
-#nex_request label{
-    color:white;
-}
+
 #nex_request table{
     border-collapse:collapse;
 border:none;
@@ -92,4 +91,8 @@ width:207px;
 }
 #Questions{
     resize:none;
+}
+.form-item, .form-actions{
+    margin-top:0;
+    margin-bottom:0;
 }

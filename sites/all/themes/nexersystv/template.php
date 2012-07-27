@@ -17,12 +17,12 @@ function nexersystv_preprocess_page(&$vars) {
         drupal_add_js(path_to_theme().'/js/nexersystv-form.js');
     }
         if(arg(1) == 8 || arg(1) == 9 || arg(1) == 10 || arg(1) == 11){
-        drupal_add_js(path_to_theme().'/form/js/nexersysform.js');
-        drupal_add_js(path_to_theme().'/form/js/jquery.validationEngine.js');
-        drupal_add_js(path_to_theme().'/form/js/jquery.validationEngine-en.js');
-        drupal_add_css(path_to_theme() . '/form/css/validationEngine.jquery.css');
+        //drupal_add_js(path_to_theme().'/form/js/nexersysform.js');
+        //drupal_add_js(path_to_theme().'/form/js/jquery.validationEngine.js');
+        //drupal_add_js(path_to_theme().'/form/js/jquery.validationEngine-en.js');
+        //drupal_add_css(path_to_theme() . '/form/css/validationEngine.jquery.css');
     }
-    drupal_add_css('sites/all/themes/nexersystv/form/css/nex_request.css');
+    //drupal_add_css('sites/all/themes/nexersystv/form/css/nex_request.css');
 }
 drupal_add_js('/' . path_to_theme().'/js/nexersystv-pardot.js'
         , array('type' => 'external', 'scope' => 'footer', 'weight' => 5)

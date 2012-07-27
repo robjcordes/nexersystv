@@ -14,8 +14,6 @@ function nexersys_landing_install() {
   
   // http://api.drupal.org/api/function/node_type_set_defaults/7
   $content_type = node_type_set_defaults($node_campaign);
-  //node_add_body_field($content_type);
-
   
 // Save the content type
     node_type_save($content_type);
@@ -49,6 +47,10 @@ function nexersys_landing_install() {
         ),
         array(
             'field_name' => 'field_camp_term', 
+            'type' => 'text',
+        ),
+        array(
+            'field_name' => 'field_gen_url', 
             'type' => 'text',
         ),
     );
@@ -165,7 +167,8 @@ function nexersys_landing_install() {
             ),
         ),
                 array(
-            'field_name' => 'field_camp_media', 
+            'field_name' => 'field_camp_media',
+            'locked' => TRUE,
             'entity_type' => 'node', 
             'label' => 'Campaign Media', 
             'bundle' => 'campaign', 
@@ -187,10 +190,33 @@ function nexersys_landing_install() {
         ),
                 array(
             'field_name' => 'field_camp_term', 
+            'locked' => TRUE,
             'entity_type' => 'node', 
             'label' => 'Campaign Term', 
             'bundle' => 'campaign', 
             'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),  
+                    'display' => array(
+                'default' => array(
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                ),
+                'teaser' => array(
+                    'label' => 'hidden',
+                    'settings' => array(),
+                    'type' => 'hidden',
+                ),
+            ),
+        ),
+        array(
+            'field_name' => 'field_gen_url', 
+            'locked' => TRUE,
+            'entity_type' => 'node', 
+            'label' => 'Generated URL', 
+            'bundle' => 'campaign', 
+            'required' => FALSE,
             'widget' => array(
                 'type' => 'textfield',
             ),  
@@ -221,8 +247,10 @@ function nexersys_landing_uninstall(){
         field_delete_field('field_camp_phone');
         field_delete_field('field_camp_thank_url');
         field_delete_field('field_camp_offer_txt');
-        field_delete_field('field_camp_offer_media');
-        field_delete_field('field_camp_offer_term');
+        field_delete_field('field_camp_media');
+        field_delete_field('field_camp_term');
+        field_delete_field('field_gen_url');
+        
 
 }
 ?>
