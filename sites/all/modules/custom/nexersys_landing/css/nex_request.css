@@ -52,13 +52,14 @@
 	margin-bottom: 10px;
 }
 
-#campaign-landing-form .submit{
-    background: url("/sites/all/themes/nexersystv/form/img/request-but-up.png") repeat scroll 0 0 transparent;
+#campaign-landing-form .form-submit{
+    xbackground: url("/sites/all/themes/nexersystv/form/img/request-but-up.png") repeat scroll 0 0 transparent;
     border: medium none;
+    bottom: 90px;
     height: 59px;
     margin-left: 111px;
     position: absolute;
-    top: 320px;
+    right: 130px;
     width: 258px;
 }
 #campaign-landing-form .down{
@@ -76,10 +77,13 @@ border:none;
 }
 #campaign-landing-form .label{
     padding-right:10px;
-}
-#campaign-landing-form td.label {
-    vertical-align:top;
     text-align:right;
+}
+#nex_request input{
+    height:24px;
+}
+#campaign-landing-form td {
+    vertical-align:top;
     line-height:28px;
 }
 #campaign-landing-form tr{

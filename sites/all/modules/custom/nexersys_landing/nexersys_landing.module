@@ -186,10 +186,9 @@ function campaign_landing_form($form, &$form_state, $vars){
             //'#required' => true,
             '#attributes' => array('class' => array('nexersys validate[required]'),),
             '#title_display' => 'invisible',
-            '#name' => 'LEADCF24',
             '#suffix' => t('</td></tr>'),
         );
-                    $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
+        $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
 
     }elseif($camp_types[$vars['camp_type']] == 'home'){
                 $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
@@ -257,7 +256,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
     $form['submit'] = array(
-        '#prefix' => t('<tr><td></td><td>'),
+        '#prefix' => t('<tr><td></td><td colspan="2">'),
         '#type' => 'image_button',
         '#src' => drupal_get_path('module', 'nexersys_landing') . '/img/request-but-up.png',
         '#suffix' => t('</td></tr>'),
