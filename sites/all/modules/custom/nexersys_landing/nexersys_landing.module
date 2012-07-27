@@ -85,21 +85,33 @@ function theme_nexersys_landing_view($variables){
     return drupal_render($variables['nexersys_landing']['#form']);
 
 }
-/*
-function nexersys_landing_field_widget_properties_alter(&$widget, $context){
-    if($context['field']['field_name'] == 'field_gen_url'){
-        //debug($widget);
-    }
-    
-}
- * 
- */
 
 function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
+    global $base_url;
     if($form_id == 'campaign_node_form'){
-        $form['field_gen_url']['#prefix'] = '<a href="Javascript:void(0);" class="gen_url_link">Generate link</div>';
-        $form['field_gen_url']['#attributes']['class'][] = 'genUrlInput';
-        debug($form['field_gen_url']['#attributes']);
+        $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
+        $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'utm_src';
+        
+        //$form['field_camp_phone']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        //$form['field_camp_phone']['und'][0]['value']['#attributes']['class'][] = 'utm_phone';
+        
+        //$form['field_camp_thank_url']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        
+        $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'utm_content';
+        
+        $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'utm_media';
+        
+        $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
+        $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'utm_term';
+        
+        
+        
+        $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a>';
+        $form['field_gen_url']['und'][0]['value']['#attributes']['class'][] = 'genUrl';
+        //debug($form['field_gen_url']['und'][0]['value']['#attributes']);
     }
 }
 

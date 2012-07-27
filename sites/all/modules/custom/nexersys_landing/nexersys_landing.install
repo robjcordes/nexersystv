@@ -8,7 +8,8 @@ function nexersys_landing_install() {
         'base' => 'node_content',
         'description' => $t('An individual campaign created by nexersys staff for unique landing forms.'),
         'has_body' => FALSE,
-        //'has_title' => FALSE,
+        'has_title' => TRUE,
+        'title_label' => 'Campaign Name',
     );
 
   
@@ -18,6 +19,10 @@ function nexersys_landing_install() {
 // Save the content type
     node_type_save($content_type);
     $fields = array(
+        array(    
+            'field_name' => 'field_camp_website', 
+            'type' => 'text',
+        ),
         array(    
             'field_name' => 'field_camp_src', 
             'type' => 'text',
@@ -58,6 +63,27 @@ function nexersys_landing_install() {
         field_create_field($value);
     }
     $instances = array(
+                array(
+            'field_name' => 'field_camp_website', 
+            'entity_type' => 'node', 
+            'label' => 'Website URL', 
+            'bundle' => 'campaign', 
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                ),
+                'teaser' => array(
+                    'label' => 'hidden',
+                    'settings' => array(),
+                    'type' => 'hidden',
+                ),
+            ),
+        ),
         array(
             'field_name' => 'field_camp_src', 
             'entity_type' => 'node', 
@@ -125,7 +151,7 @@ function nexersys_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_phone', 
+            'field_name' => 'field_camp_phone',
             'entity_type' => 'node', 
             'label' => 'Campaign Phone Number', 
             'bundle' => 'campaign', 
@@ -146,7 +172,8 @@ function nexersys_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_offer_txt', 
+            'field_name' => 'field_camp_offer_txt',
+            'locked' => TRUE,
             'entity_type' => 'node', 
             'label' => 'Campaign Offer Text', 
             'bundle' => 'campaign', 
@@ -219,6 +246,7 @@ function nexersys_landing_install() {
             'required' => FALSE,
             'widget' => array(
                 'type' => 'textfield',
+                'settings' => array('size' => 100),
             ),  
                     'display' => array(
                 'default' => array(
@@ -242,6 +270,7 @@ function nexersys_landing_install() {
 
 
 function nexersys_landing_uninstall(){
+    field_delete_field('field_camp_website');
     field_delete_field('field_camp_src');
         field_delete_field('field_camp_type');
         field_delete_field('field_camp_phone');
