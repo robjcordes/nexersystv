@@ -47,7 +47,8 @@ function nexersys_landing_theme() {
     );
     return $theme;
 }
-
+//$postdata = $_POST;
+//debug($postdata);
 /**
  * Implements hook_node_view().
  */
@@ -81,9 +82,7 @@ function nexersys_landing_node_view($node, $view_mode) {
   );
 }
 function theme_nexersys_landing_view($variables){
-
     return drupal_render($variables['nexersys_landing']['#form']);
-
 }
 
 function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
@@ -134,9 +133,12 @@ function campaign_landing_form($form, &$form_state, $vars){
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
         </div>
     </div>
-    <div class="right"><table id ="nexersys-form-fields">';
+    <div class="right">';
     $form['#method'] = 'post';
     //$form['#action'] = 'https://crm.zoho.com/crm/WebToLeadForm';
+    $form['table_begin'] = array(
+    '#markup' => t('<table id ="nexersys-form-fields">'),
+    );
     $form['LEADCF13'] = array(
         '#type' => 'hidden',
         '#value' => 'NexersysNow.com Ebrochure Form',
@@ -219,7 +221,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#type' => 'textfield',
         '#title' => 'Email Address',
         //'#required' => true,
-        '#attributes' => array('class' => array('nexersys validate[required]'),),
+        '#attributes' => array('class' => array('nexersys validate[required,custom[email]]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
