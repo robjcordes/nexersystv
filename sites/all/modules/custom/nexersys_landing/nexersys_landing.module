@@ -32,6 +32,9 @@ function _camp_types(){
     return $options;
 }
 function nexersys_landing_init(){
+    
+    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_src_sniffer.js');
+    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery-cookie/jquery.cookie.js');            
 }
 /**
  * Implements hook_theme().
