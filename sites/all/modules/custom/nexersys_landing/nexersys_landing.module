@@ -125,7 +125,7 @@ function nexersys_landing_preprocess_page(&$vars){
 }
 
 function campaign_landing_form($form, &$form_state, $vars){
-    debug($vars);
+    //debug($vars);
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
         <div class="left-top">
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-bro-home.png"/></div>
@@ -505,5 +505,5 @@ function get_country_options(){
     );
 }
 function campaign_landing_form_submit($form, &$form_state){
-    debug($form_state['values']);
+    //debug($form_state['values']);
 }
