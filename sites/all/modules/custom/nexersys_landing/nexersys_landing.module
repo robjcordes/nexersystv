@@ -53,13 +53,18 @@ function nexersys_landing_theme() {
  * Implements hook_node_view().
  */
 function nexersys_landing_node_view($node, $view_mode) {
+    global $base_url;
     drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/validationEngine.jquery.css');
     drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/nex_request.css');
     drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine-en.js');
     drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine.js');
     drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_landing.js');
-
+    $item = menu_get_item();    
+    $path = $item['href'];
+    $path = drupal_get_path_alias($path);
     $vars = array(
+        'camp_form_url' => $base_url . '/' . $path,
+        'camp_name' => $node->title,
         'camp_src' => $node->field_camp_src[$node->language][0]['value'],
         'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
         'camp_type' => $node->field_camp_type[$node->language][0]['value'],
@@ -94,11 +99,6 @@ function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'utm_src';
         
-        //$form['field_camp_phone']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
-        //$form['field_camp_phone']['und'][0]['value']['#attributes']['class'][] = 'utm_phone';
-        
-        //$form['field_camp_thank_url']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
-        
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'utm_content';
         
@@ -117,6 +117,7 @@ function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
 }
 
 function nexersys_landing_preprocess_page(&$vars){
+
     if((arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'campaign') || (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'edit')){
             drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_gen_url.js');
 
@@ -124,6 +125,7 @@ function nexersys_landing_preprocess_page(&$vars){
 }
 
 function campaign_landing_form($form, &$form_state, $vars){
+    
     //debug($vars);
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
         <div class="left-top">
@@ -141,22 +143,22 @@ function campaign_landing_form($form, &$form_state, $vars){
     );
     $form['LEADCF13'] = array(
         '#type' => 'hidden',
-        '#value' => 'NexersysNow.com Ebrochure Form',
+        '#value' => $vars['camp_name'],
     );
     $form['LEADCF14'] = array(
         '#type' => 'hidden',
-        '#value' => 'http://nexersysNow.com/ebrochure',
+        '#value' => $vars['camp_form_url'],
     );
     $form['LEADCF1'] = array(
         '#type' => 'hidden',
-        '#value' => 'NexersysNow.com Ebrochure Form',
+        '#value' => $vars['camp_name'],
     );
     $form['LEADCF5'] = array(
         '#type' => 'hidden',
-        '#value' => 'http://nexersysNow.com/ebrochure',
+        '#value' => $vars['camp_form_url'],
     );
     $form['FirstName'] = array(
-        '#prefix' => t('<tr><td>First Name*</td><td>'),
+        '#prefix' => t('<tr><td class="label">First Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'First Name',
         //'#required' => true,
@@ -165,7 +167,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
     $form['LastName'] = array(
-        '#prefix' => t('<tr><td>Last Name*</td><td>'),
+        '#prefix' => t('<tr><td class="label">Last Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Last Name',
         //'#required' => true,
@@ -197,7 +199,7 @@ function campaign_landing_form($form, &$form_state, $vars){
     }else{
         //visitor has to choose, make it a select form.
         $form['LEADCF3'] = array(
-        '#prefix' => t('<tr><td>Model Type*</td><td>'),
+        '#prefix' => t('<tr><td class="label">Model Type*</td><td>'),
         '#type' => 'select',
         '#options' => $clean_camp_types,
         '#title' => 'Model Type',
@@ -208,7 +210,7 @@ function campaign_landing_form($form, &$form_state, $vars){
     );
     }
     $form['Phone'] = array(
-        '#prefix' => t('<tr><td>Phone Number*</td><td>'),
+        '#prefix' => t('<tr><td class="label">Phone Number*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Phone Number',
         //'#required' => true,
@@ -217,7 +219,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
         $form['Email'] = array(
-        '#prefix' => t('<tr><td>eMail Address*</td><td>'),
+        '#prefix' => t('<tr><td class="label">eMail Address*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Email Address',
         //'#required' => true,
@@ -226,7 +228,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
         $form['ZipCode'] = array(
-        '#prefix' => t('<tr><td>Zip Code*</td><td>'),
+        '#prefix' => t('<tr><td class="label">Zip Code*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Zip Code',
         //'#required' => true,
@@ -235,7 +237,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
         $form['LEADCF11'] = array(
-        '#prefix' => t("<tr><td>I'm Located in the*</td><td>"),
+        '#prefix' => t("<tr><td class='label'>I'm Located in the*</td><td>"),
         '#type' => 'select',
         '#options' => get_country_options(),
         '#title' => 'Model Type',
@@ -245,12 +247,13 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
         $form['LEADCF28'] = array(
-        '#prefix' => t("<tr><td>Questions?</td><td>"),
+        '#prefix' => t('<tr><td class="label">Questions</td><td>'),
         '#type' => 'textarea',
         '#title' => 'Questions',
         //'#required' => false,
         '#attributes' => array('class' => array('nexersys'),),
         '#title_display' => 'invisible',
+        '#resizable' => FALSE,
         '#suffix' => t('</td></tr>'),
     );
     $form['submit'] = array(
@@ -264,9 +267,9 @@ function campaign_landing_form($form, &$form_state, $vars){
 }
 function get_country_options(){
     return array(
-      'United Kingdom' => 'United Kingdom',
   'United States' => 'United States',
-    'Afghanistan' => 'Afghanistan',
+  'United Kingdom' => 'United Kingdom',
+  'Afghanistan' => 'Afghanistan',
   'Aland Islands' => 'Aland Islands',
   'Albania' => 'Albania',
   'Algeria' => 'Algeria',
