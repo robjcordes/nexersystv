@@ -2,7 +2,7 @@ var $ = jQuery.noConflict();
 $(document).ready(function() {
     
     $('.gen_url_link').click(function(){
-        var genUrl = 'http://www.nexersystv.com?';
+        var genUrl = $('#campaign-node-form .utm_website').val() + '?';
         var urlParams = '';
         //http://test.com/?utm_source=citytheft&utm_medium=banner&utm_term=bike&utm_content=10%25%2Bdiscount&utm_campaign=roberts%2Bcampaign
         $('#campaign-node-form .urlVar').each(function(){
