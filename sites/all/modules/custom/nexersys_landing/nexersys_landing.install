@@ -58,6 +58,10 @@ function nexersys_landing_install() {
             'field_name' => 'field_gen_url', 
             'type' => 'text',
         ),
+        array(
+            'field_name' => 'field_camp_img_1',
+            'type' => 'image',
+        ),
     );
     foreach($fields as $key=>$value){
         field_create_field($value);
@@ -260,6 +264,29 @@ function nexersys_landing_install() {
                 ),
             ),
         ),
+        array(
+            'field_name' => 'field_camp_img_1', 
+            'locked' => TRUE,
+            'entity_type' => 'node', 
+            'label' => 'Campaign Image', 
+            'bundle' => 'campaign', 
+            'required' => FALSE,
+            'widget' => array(
+                'type' => 'image_image',
+                'settings' => array(),
+            ),  
+                    'display' => array(
+                'default' => array(
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                ),
+                'teaser' => array(
+                    'label' => 'hidden',
+                    'settings' => array(),
+                    'type' => 'hidden',
+                ),
+            ),
+        ),
     );
     foreach($instances as $key=>$value){
         field_create_instance($value);
@@ -279,6 +306,7 @@ function nexersys_landing_uninstall(){
         field_delete_field('field_camp_media');
         field_delete_field('field_camp_term');
         field_delete_field('field_gen_url');
+        field_delete_field('field_camp_img_1');
         
 
 }
