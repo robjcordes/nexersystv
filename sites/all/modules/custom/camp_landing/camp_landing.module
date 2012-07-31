@@ -95,8 +95,7 @@ function _camp_types(){
  * Implementation of hook_init().
  */
 
-function camp_landing_init(){
-    
+function camp_landing_init(){  
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');            
 }
@@ -124,8 +123,8 @@ function campaign_landing_choose_campaign(){
     foreach($sources as $srcKey=>$srcVal){
         if($srcVal['src'] == $referrer){
             $source_match = true;
-            debug('there\'s a match!');
             $campaign = $srcVal['entity_id'];
+            
         }
     }
 
