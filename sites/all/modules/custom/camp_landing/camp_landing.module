@@ -1,10 +1,18 @@
 <?php
+/*
+ * todo: admin page to select default campaign in case of no source match
+ * 
+ */
 function camp_landing_permission() {
   return array(
     'access camp_landing' => array(
       'title' => t('Access Campaign Landing'),
-      'description' => t('Basic access to site for anons'),
+      'description' => t('Basic access to campaign landing forms'),
       'restrict access' => FALSE,
+    ),
+      'administer camp_landing' => array(
+      'title' => t('Access Campaign Landing'),
+      'description' => t('Administer Campaigns'),
     ),
   );
 }
@@ -14,11 +22,12 @@ function camp_landing_permission() {
 */
 
 function camp_landing_menu(){
-    $items['admin/settings/camp_landing'] = array(
+    $items['admin/config/camp_landing'] = array(
     'title' => 'Landing page control',
     'page callback' => 'drupal_get_form',
     'access arguments' => array('access camp_landing'),
-    'page arguments' => array('campaign_landing_form'),
+    'page arguments' => array('camp_landing_settings'),
+    'access arguments' => array('administer camp_landing'),
   );
     $items['camp_landing/track'] = array(
     'title' => 'Track Users',
@@ -30,26 +39,102 @@ return $items;
 
 }
 
+/*
+ * Implementation of hook_block_info()
+ */
+
+function camp_landing_block_info(){
+    $blocks['home_campaign']['info'] = t('Campaign Landing- Home');
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function camp_landing_block_view($delta = '') {
+    
+    $block = array();
+debug(campaign_landing_choose_campaign());
+      $block['content'] = t('just a test here');
+    
+    return $block;
+  
+}
+
+/**
+ * Administration settings form.
+ *
+ * @see system_settings_form()
+ */
+function camp_landing_settings() {
+    //todo: list all campaigs, select default
+   $form['camp_default_img'] = array(
+    //'#name' => 'files["test"]',
+    '#type' => 'file',
+    '#title' => t('Choose a file'),
+    //'#title_display' => 'invisible',
+    '#size' => 22,
+    '#theme_wrappers' => array(),
+    '#weight' => -10,
+  );
+
+  return system_settings_form($form, FALSE);
+}
 function camp_landing_track(){
     $output = '';
     
     return null;
 }
-function camp_landing_field_formatter_info(){
 
-}
 function _camp_types(){
     $options = array('Unknown'=>'unknown', 'Commercial'=>'commercial', 'Home'=>'home', 'Pro'=>'pro',);
     return $options;
 }
+
+/*
+ * Implementation of hook_init().
+ */
+
 function camp_landing_init(){
     
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');            
 }
+
+/*
+ * @func determine the campaign to show in the home page block
+ * @return false if no match, entity_id of campaign if match
+ */
+function campaign_landing_choose_campaign(){ 
+    $source_match = false;
+    $campaign = false;
+    $sources = array();
+    $referrer = $_SERVER['HTTP_REFERER'];
+    if(substr($referrer, -1) == '/'){
+        $referrer = substr($referrer, 0, -1);
+    } 
+    debug('referrer: ' . $referrer);
+        $query = db_select('field_data_field_camp_src', 'src');
+        $query->fields('src', array('field_camp_src_value', 'entity_id'));
+        $result = $query->execute();
+    //debug($result);
+    foreach($result as $key=>$value){
+        $sources[] = array('src' => $value->field_camp_src_value, 'entity_id' => $value->entity_id);
+    }
+    foreach($sources as $srcKey=>$srcVal){
+        if($srcVal['src'] == $referrer){
+            $source_match = true;
+            debug('there\'s a match!');
+            $campaign = $srcVal['entity_id'];
+        }
+    }
+
+    return $campaign;
+}
 /**
  * Implements hook_theme().
  */
+
 function camp_landing_theme() {
     $theme = array(
         'camp_landing_view' => array(
@@ -60,11 +145,11 @@ function camp_landing_theme() {
     );
     return $theme;
 }
-//$postdata = $_POST;
-//debug($postdata);
-/**
- * Implements hook_node_view().
+
+/*
+ * Implementation of hook_node_view().
  */
+
 function camp_landing_node_view($node, $view_mode) {
     if($node->type == 'campaign'){
         global $base_url;
@@ -98,7 +183,6 @@ function camp_landing_node_view($node, $view_mode) {
         );
     }
 
-    
 }
 function theme_camp_landing_view($variables){
     return drupal_render($variables['camp_landing']['#form']);
@@ -139,6 +223,9 @@ function camp_landing_preprocess_page(&$vars){
 }
 
 function campaign_landing_form($form, &$form_state, $vars){
+    /*
+     * todo: give control of required fields during campaign creation
+     */
     
     //debug($vars);
     $form['#prefix'] = '<div id="nex_request">    <div class="left">
@@ -524,9 +611,4 @@ function get_country_options(){
 }
 function campaign_landing_form_submit($form, &$form_state){
     //debug($form_state['values']);
-}
-function campaign_landing_choose_campaign(){
-    $sources_query = db_query();
-    
-    return $camp;
 }

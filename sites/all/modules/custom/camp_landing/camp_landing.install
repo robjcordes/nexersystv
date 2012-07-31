@@ -62,6 +62,23 @@ function camp_landing_install() {
             'field_name' => 'field_camp_img_1',
             'type' => 'image',
         ),
+
+        
+        array(
+      'field_name' => 'camp_default_img',
+      'type' => 'file',
+      'module' => 'file',
+      'locked' => FALSE,
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'translatable' => FALSE,
+      'settings' => array(
+        'display_field' => 1,
+        //'display_default' => variable_get('upload_list_default', 1),
+        //'uri_scheme' => file_default_scheme(),
+        //'default_file' => 0,
+      ),
+            ),
+    
     );
     foreach($fields as $key=>$value){
         field_create_field($value);
@@ -287,6 +304,29 @@ function camp_landing_install() {
                 ),
             ),
         ),
+        
+        array(
+      'field_name' => 'camp_default_img',
+      'entity_type' => 'node',
+      'bundle' => 'NULL',
+      'label' => 'File attachments',
+      'required' => 0,
+      'description' => '',
+      'widget' => array(
+        'weight' => '1',
+        'settings' => array(
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'file_generic',
+      ),
+      'settings' => array(
+        'max_filesize' => $upload_size ? ($upload_size . ' MB') : '',
+        'file_extensions' => variable_get('upload_extensions_default', 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp'),
+        'file_directory' => '',
+        'description_field' => 1,
+      ),
+
+    ),
     );
     foreach($instances as $key=>$value){
         field_create_instance($value);
@@ -307,7 +347,7 @@ function camp_landing_uninstall(){
         field_delete_field('field_camp_term');
         field_delete_field('field_gen_url');
         field_delete_field('field_camp_img_1');
-        
+        field_delete_field('camp_default_img');
 
 }
 ?>

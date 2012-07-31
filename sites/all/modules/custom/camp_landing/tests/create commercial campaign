@@ -19,12 +19,12 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title</td>
-	<td>test</td>
+	<td>Commercial Test Form</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=edit-field-camp-src-und-0-value</td>
-	<td>google.com</td>
+	<td>http://drupal7.localhost:8888</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -61,7 +61,6 @@
 	<td>id=edit-submit</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
