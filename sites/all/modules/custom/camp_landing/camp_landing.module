@@ -54,8 +54,19 @@ function camp_landing_block_info(){
 function camp_landing_block_view($delta = '') {
     
     $block = array();
-debug(campaign_landing_choose_campaign());
-      $block['content'] = t('just a test here');
+    $campaign = campaign_landing_choose_campaign();
+    //todo: select generic campaign if return false
+    if($campaign != false){
+        $node = node_load($campaign);
+        $filename = $node->field_camp_img_1[$node->language][0]['filename'];
+        $filepath = '/sites/default/files/' . $filename;
+        $alias = drupal_get_path_alias('node/' . $node->nid);
+        $promo = '<a href="/' . $alias . '"><img src="' . $filepath . '"/></a>';
+    }else{
+        $promo = '<a href="/node/32"><img src="/sites/default/files/fromD6.png"/></a>';
+        //todo: grab generic campaign img here
+    }
+      $block['content'] = $promo;
     
     return $block;
   
@@ -112,7 +123,7 @@ function campaign_landing_choose_campaign(){
     if(substr($referrer, -1) == '/'){
         $referrer = substr($referrer, 0, -1);
     } 
-    debug('referrer: ' . $referrer);
+    //debug('referrer: ' . $referrer);
         $query = db_select('field_data_field_camp_src', 'src');
         $query->fields('src', array('field_camp_src_value', 'entity_id'));
         $result = $query->execute();
