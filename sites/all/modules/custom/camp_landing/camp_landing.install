@@ -1,5 +1,5 @@
 <?php
-function nexersys_landing_install() {
+function camp_landing_install() {
     $t = get_t();
 
     $node_campaign = array(
@@ -296,7 +296,7 @@ function nexersys_landing_install() {
 }
 
 
-function nexersys_landing_uninstall(){
+function camp_landing_uninstall(){
     field_delete_field('field_camp_website');
     field_delete_field('field_camp_src');
         field_delete_field('field_camp_type');

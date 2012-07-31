@@ -1,8 +1,8 @@
 <?php
-function nexersys_landing_permission() {
+function camp_landing_permission() {
   return array(
-    'access nexersystv' => array(
-      'title' => t('Access Nexersystv'),
+    'access camp_landing' => array(
+      'title' => t('Access Campaign Landing'),
       'description' => t('Basic access to site for anons'),
       'restrict access' => FALSE,
     ),
@@ -13,11 +13,11 @@ function nexersys_landing_permission() {
 * Implementation of hook_menu()
 */
 
-function nexersys_landing_menu(){
-    $items['admin/nexersys-form'] = array(
+function camp_landing_menu(){
+    $items['admin/settings/camp_landing'] = array(
     'title' => 'Landing page control',
     'page callback' => 'drupal_get_form',
-    'access arguments' => array('access nexersystv'),
+    'access arguments' => array('access camp_landing'),
     'page arguments' => array('campaign_landing_form'),
   );
     $items['camp_landing/track'] = array(
@@ -32,30 +32,29 @@ return $items;
 
 function camp_landing_track(){
     $output = '';
-    setcookie('nexersystvcookie', 'somedata', time() + 2000, '/', 'www.nexersystv.com');
+    
     return null;
 }
-function nexersys_landing_field_formatter_info(){
+function camp_landing_field_formatter_info(){
 
 }
 function _camp_types(){
     $options = array('Unknown'=>'unknown', 'Commercial'=>'commercial', 'Home'=>'home', 'Pro'=>'pro',);
     return $options;
 }
-function nexersys_landing_init(){
+function camp_landing_init(){
     
-    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_src_sniffer.js');
-    drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery-cookie/jquery.cookie.js');            
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');            
 }
 /**
  * Implements hook_theme().
  */
-function nexersys_landing_theme() {
+function camp_landing_theme() {
     $theme = array(
-        'nexersys_landing_view' => array(
-            'render element' => 'nexersys_landing',
-            //'path' => drupal_get_path('module', 'nexersys_landing') . '/templates',
-            //'template' => 'nexersys-landing-form',
+        'camp_landing_view' => array(
+            'render element' => 'camp_landing',
+            //'path' => drupal_get_path('module', 'camp_landing') . '/templates',
             //'variables' => array('form' => NULL,),
             ),
     );
@@ -66,14 +65,14 @@ function nexersys_landing_theme() {
 /**
  * Implements hook_node_view().
  */
-function nexersys_landing_node_view($node, $view_mode) {
+function camp_landing_node_view($node, $view_mode) {
     if($node->type == 'campaign'){
         global $base_url;
-        drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/validationEngine.jquery.css');
-        drupal_add_css(drupal_get_path('module', 'nexersys_landing') . '/css/nex_request.css');
-        drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine-en.js');
-        drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/jquery.validationEngine.js');
-        drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_landing.js');
+        drupal_add_css(drupal_get_path('module', 'camp_landing') . '/css/validationEngine.jquery.css');
+        drupal_add_css(drupal_get_path('module', 'camp_landing') . '/css/nex_request.css');
+        drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery.validationEngine-en.js');
+        drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery.validationEngine.js');
+        drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_landing.js');
         $item = menu_get_item();    
         $path = $item['href'];
         $path = drupal_get_path_alias($path);
@@ -93,22 +92,19 @@ function nexersys_landing_node_view($node, $view_mode) {
         $form = drupal_get_form('campaign_landing_form', $vars);
 
         // Add the output to the node.
-        $node->content['nexersys_landing'] = array(
-        '#theme' => 'nexersys_landing_view',
-        //'#node' => $node,
-        //'#teaser' => $teaser,
-        //'#page' => $page,
+        $node->content['camp_landing'] = array(
+        '#theme' => 'camp_landing_view',
         '#form' => $form,
         );
     }
 
     
 }
-function theme_nexersys_landing_view($variables){
-    return drupal_render($variables['nexersys_landing']['#form']);
+function theme_camp_landing_view($variables){
+    return drupal_render($variables['camp_landing']['#form']);
 }
 
-function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
+function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
@@ -134,10 +130,10 @@ function nexersys_landing_form_alter(&$form, &$form_state, $form_id){
     }
 }
 
-function nexersys_landing_preprocess_page(&$vars){
+function camp_landing_preprocess_page(&$vars){
 
     if((arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'campaign') || (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'edit')){
-            drupal_add_js(drupal_get_path('module', 'nexersys_landing') . '/js/campaign_gen_url.js');
+            drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_gen_url.js');
 
     }
 }
@@ -276,7 +272,7 @@ function campaign_landing_form($form, &$form_state, $vars){
     $form['submit'] = array(
         '#prefix' => t('<tr><td></td><td colspan="2">'),
         '#type' => 'image_button',
-        '#src' => drupal_get_path('module', 'nexersys_landing') . '/img/request-but-up.png',
+        '#src' => drupal_get_path('module', 'camp_landing') . '/img/request-but-up.png',
         '#suffix' => t('</td></tr>'),
     );
     $form['#suffix'] = '</table></div></div>';
