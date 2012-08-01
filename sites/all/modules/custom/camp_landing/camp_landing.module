@@ -138,11 +138,9 @@ function campaign_landing_choose_campaign(){
     if(substr($referrer, -1) == '/'){
         $referrer = substr($referrer, 0, -1);
     }
-    //debug('referrer: ' . $referrer);
-        $query = db_select('field_data_field_camp_src', 'src');
-        $query->fields('src', array('field_camp_src_value', 'entity_id'));
-        $result = $query->execute();
-    //debug($result);
+    $query = db_select('field_data_field_camp_src', 'src');
+    $query->fields('src', array('field_camp_src_value', 'entity_id'));
+    $result = $query->execute();
     foreach($result as $key=>$value){
         $sources[] = array('src' => $value->field_camp_src_value, 'entity_id' => $value->entity_id);
     }
@@ -234,7 +232,6 @@ function camp_landing_form_alter(&$form, &$form_state, $form_id){
 
         $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a>';
         $form['field_gen_url']['und'][0]['value']['#attributes']['class'][] = 'genUrl';
-        //debug($form['field_gen_url']['und'][0]['value']['#attributes']);
     }
 }
 
@@ -254,11 +251,9 @@ function campaign_landing_form($form, &$form_state, $vars){
      * todo: give control of required fields during campaign creation
      */
 
-    //debug($vars);
     $camp_types = _camp_types();
     $clean_camp_types = $camp_types;
     array_shift($clean_camp_types);
-    debug($camp_types[$vars['camp_type']]);
     if($camp_types[$vars['camp_type']] == 'commercial'){
         $top_left_img = drupal_get_path('module', 'camp_landing') . '/img/nex-bro-comm.png';
     }elseif($camp_types[$vars['camp_type']] == 'home'){
@@ -284,28 +279,22 @@ function campaign_landing_form($form, &$form_state, $vars){
     '#markup' => t('<table id ="nexersys-form-fields">'),
     );
     //hidden form elements
-    $form['LEADCF13'] = array(
+    $form['camp_name'] = array(
         '#type' => 'hidden',
         '#value' => $vars['camp_name'],
     );
-    $form['LEADCF14'] = array(
+    $form['camp_form_url'] = array(
         '#type' => 'hidden',
         '#value' => $vars['camp_form_url'],
     );
-    $form['LEADCF1'] = array(
-        '#type' => 'hidden',
-        '#value' => $vars['camp_name'],
-    );
-    $form['LEADCF5'] = array(
-        '#type' => 'hidden',
-        '#value' => $vars['camp_form_url'],
-    );
+    
+    
     $form['returnURL'] = array(
         '#type' => 'hidden',
         '#value' => 'http://www.nexersys.com/thank-you',
     );
     
-    $form['FirstName'] = array(
+    $form['first_name'] = array(
         '#prefix' => t('<tr><td class="label">First Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'First Name',
@@ -314,7 +303,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-    $form['LastName'] = array(
+    $form['last_name'] = array(
         '#prefix' => t('<tr><td class="label">Last Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Last Name',
@@ -325,7 +314,7 @@ function campaign_landing_form($form, &$form_state, $vars){
     );
 
     if($camp_types[$vars['camp_type']] == 'commercial'){
-            $form['LEADCF24'] = array(
+            $form['company'] = array(
             '#prefix' => t('<tr><td class="label">Company Name*</td><td>'),
             '#type' => 'textfield',
             '#title' => 'Company Name',
@@ -334,15 +323,15 @@ function campaign_landing_form($form, &$form_state, $vars){
             '#title_display' => 'invisible',
             '#suffix' => t('</td></tr>'),
         );
-        $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
+        $form['model'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
 
     }elseif($camp_types[$vars['camp_type']] == 'home'){
-        $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
+        $form['model'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
     }elseif($camp_types[$vars['camp_type']] == 'pro'){
-        $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
+        $form['model'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
     }else{
         //visitor has to choose, make it a select form.
-        $form['LEADCF3'] = array(
+        $form['model'] = array(
         '#prefix' => t('<tr><td class="label">Model Type*</td><td>'),
         '#type' => 'select',
         '#options' => $clean_camp_types,
@@ -353,7 +342,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#suffix' => t('</td></tr>'),
     );
     }
-    $form['Phone'] = array(
+    $form['phone'] = array(
         '#prefix' => t('<tr><td class="label">Phone Number*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Phone Number',
@@ -362,7 +351,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['Email'] = array(
+        $form['email'] = array(
         '#prefix' => t('<tr><td class="label">eMail Address*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Email Address',
@@ -371,7 +360,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['ZipCode'] = array(
+        $form['zip'] = array(
         '#prefix' => t('<tr><td class="label">Zip Code*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Zip Code',
@@ -380,17 +369,17 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['LEADCF11'] = array(
+        $form['country'] = array(
         '#prefix' => t("<tr><td class='label'>I'm Located in the*</td><td>"),
         '#type' => 'select',
         '#options' => get_country_options(),
-        '#title' => 'Model Type',
+        '#title' => 'Country',
         //'#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['LEADCF28'] = array(
+        $form['questions'] = array(
         '#prefix' => t('<tr><td class="label">Questions</td><td>'),
         '#type' => 'textarea',
         '#title' => 'Questions',
@@ -410,9 +399,10 @@ function campaign_landing_form($form, &$form_state, $vars){
     return $form;
 }
 function campaign_landing_form_submit($form, &$form_state){
-    $url = 'https://crm.zoho.com/crm/WebToLeadForm';
-    $data = 'LEADCF13=Nexersys.com+Commercial+Form&LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF1=Nexersys.com+Commercial+Form&LEADCF5=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF92=08%2F1%2F2012&LEADCF92hour=01&LEADCF92minute=30&LEADCF92ampm=PM&xnQsjsdp=f1LzxolSe-0%24&xmIwtLD=82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O&actionType=TGVhZHM%3D&returnURL=http%3A%2F%2Fwww.nexersys.com%2Fthank-you&First+Name=test&Last+Name=test&Phone=1231234&Email=test%40test.com&LEADCF15=home&Zip+Code=test&LEADCF23=United+States&LEADCF28=test';
-    //$url = 'http://www.citytheft.com';
+$data = camp_landing_gen_post_data($form_state['values']);    
+
+$url = 'https://crm.zoho.com/crm/WebToLeadForm';
+
     $options = array(
                 'method' => 'POST',
                 'data' => $data,
@@ -423,10 +413,103 @@ function campaign_landing_form_submit($form, &$form_state){
     
     /*
      * 
-     LEADCF13=Nexersys.com+Commercial+Form&LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF1=Nexersys.com+Commercial+Form&LEADCF5=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF92=08%2F1%2F2012&LEADCF92hour=01&LEADCF92minute=30&LEADCF92ampm=PM&xnQsjsdp=f1LzxolSe-0%24&xmIwtLD=82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O&actionType=TGVhZHM%3D&returnURL=http%3A%2F%2Fwww.nexersys.com%2Fthank-you&First+Name=test&Last+Name=test&Phone=1231234&Email=test%40test.com&LEADCF15=home&Zip+Code=test&LEADCF23=United+States&LEADCF28=test
+     x* LEADCF13=Nexersys.com+Commercial+Form
+     x* &LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment
+     x* &LEADCF1=Nexersys.com+Commercial+Form
+     x* &LEADCF5=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment
+     x* &LEADCF92=08%2F1%2F2012
+     x* &LEADCF92hour=01
+     x* &LEADCF92minute=30
+     x* &LEADCF92ampm=PM
+     x* &xnQsjsdp=f1LzxolSe-0%24
+     x* &xmIwtLD=82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O
+     x* &actionType=TGVhZHM%3D
+     x* &returnURL=http%3A%2F%2Fwww.nexersys.com%2Fthank-you
+     x* &First+Name=test
+     x* &Last+Name=test
+     x* &Phone=1231234
+     x* &Email=test%40test.com
+     x* &LEADCF15=home
+     x* &Zip+Code=test
+     x* &LEADCF23=United+States
+     x* &LEADCF28=test
      */
     
     //drupal_goto('http://www.nexersys.com/thank-you');
+}
+function camp_landing_gen_post_data($form_values){
+    $data = '';
+    $model = $form_values['model'];
+    $country = $form_values['country'];
+    $zohoCRM = 'home';
+    if(($model == 'Commercial') || ($model != 'Commercial' && $country != 'United States')){
+        $zohoCRM = 'commercial';
+    }
+    if($zohoCRM == 'commercial'){
+        $data .= '&LEADCF3=' . urlencode($form_values['model']); //model
+        $data .= '&LEADCF5=' . urlencode($form_values['camp_form_url']); //form url
+        $data .= '&LEADCF1=' . urlencode($form_values['camp_name']); //campaign name
+        $data .= '&LEADCF10=' . urlencode($form_values['questions']); //questions
+        $data .= '&LEADCF11=' . urlencode($form_values['country']); //country
+        $data .= !empty($form_values['company']) ? '&LEADCF24=' . urlencode($form_values['company']) : ''; //company
+        $data .= '&xnQsjsdp=' . urlencode('dhOYVrEbdmJthYo*kRl79w$$');
+        $data .= '&xmIwtLD=' . urlencode('xxtEl*Hx2ByNU*uyPq3OMHBogz4VdScW');
+        
+        
+    }else{
+        $data .= '&LEADCF15=' . urlencode($form_values['model']); //model
+        $data .= '&LEADCF14=' . urlencode($form_values['camp_form_url']); //form url
+        $data .= '&LEADCF13=' . urlencode($form_values['camp_name']); //campaign name
+        $data .= '&LEADCF28='. urlencode($form_values['questions']); //questions
+        $data .= '&LEADCF23='. urlencode($form_values['country']); //country
+        $data .= '&xnQsjsdp='. urlencode('f1LzxolSe-0$');
+        $data .= '&xmIwtLD=' . urlencode('82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O');
+        
+    }
+    $time = time();
+    $data .= '&LEADCF92ampm=' . date('A', $time);
+    $data .= '&LEADCF92hour=' . date('h', $time);
+    $data .= '&LEADCF92minute=' . date('i', $time);
+    $data .= '&LEADCF92=' . date('m/j/Y', $time);
+    $data .= '&returnURL=' . urlencode($form_values['returnURL']);
+    $data .= '&actionType=' . urlencode('TGVhZHM=');
+    $data .= '&Phone=' . urlencode($form_values['phone']);
+    $data .= '&First+Name=' . urlencode($form_values['first_name']);
+    $data .= '&Last+Name=' . urlencode($form_values['last_name']);
+    $data .= '&Email=' . urlencode($form_values['email']);
+    $data .= '&Zip+Code=' . urlencode($form_values['zip']);
+    
+    $data = substr($data, 1);
+    
+/*
+		
+		
+xCF15	model_type	zohoHome
+xCF3	model_type	zohoCommercial
+xCF24	company name	zohoCommercial
+xCF10	questions	zohoCommercial
+xCF1	hidden camp_info	zohoCommercial
+xCF11	country	zohoCommercial
+xCF92hour	hours hidden	
+xCF92minute	minute hidden	
+xCF92	datestr hidden	
+xCF92ampm	ampm hidden
+xCF5	hidden base_url	zohoCommercial
+
+
+xCF29	company name	zohoHome
+xCF23	country	zohoHome
+xCF28	questions	zohoHome
+
+	
+		
+		
+xCF14	hidden base_url	zohoHome
+xCF13	hidden camp_info	zohoHome*/
+   
+    //debug($data);
+    return $data;
+   
 }
 function get_country_options(){
     return array(
