@@ -431,7 +431,7 @@ $url = 'https://crm.zoho.com/crm/WebToLeadForm';
      x* &LEADCF28=test
      */
     
-    drupal_goto($form_state['returnURL']);
+    drupal_goto($form_state['values']['returnURL']);
 }
 function camp_landing_gen_post_data($form_values){
     $data = '';
