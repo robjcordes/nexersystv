@@ -4,39 +4,38 @@
  *
  */
 function camp_landing_permission() {
-  return array(
-    'access camp_landing' => array(
-      'title' => t('Access Campaign Landing'),
-      'description' => t('Basic access to campaign landing forms'),
-      'restrict access' => FALSE,
-    ),
-      'administer camp_landing' => array(
-      'title' => t('Access Campaign Landing'),
-      'description' => t('Administer Campaigns'),
-    ),
-  );
+    return array(
+        'access camp_landing' => array(
+            'title' => t('Access Campaign Landing'),
+            'description' => t('Basic access to campaign landing forms'),
+            'restrict access' => FALSE,
+        ),
+        'administer camp_landing' => array(
+            'title' => t('Access Campaign Landing'),
+            'description' => t('Administer Campaigns'),
+        ),
+    );
 }
 
 /**
-* Implementation of hook_menu()
-*/
+ * Implementation of hook_menu()
+ */
 
 function camp_landing_menu(){
     $items['admin/config/camp_landing'] = array(
-    'title' => 'Landing page control',
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('access camp_landing'),
-    'page arguments' => array('camp_landing_settings'),
-    'access arguments' => array('administer camp_landing'),
-  );
+        'title' => 'Landing page control',
+        'page callback' => 'drupal_get_form',
+        'access arguments' => array('access camp_landing'),
+        'page arguments' => array('camp_landing_settings'),
+        'access arguments' => array('administer camp_landing'),
+    );
     $items['camp_landing/track'] = array(
-    'title' => 'Track Users',
-    'page callback' => 'camp_landing_track',
-    'access arguments' => array('access content'),
-  );
+        'title' => 'Track Users',
+        'page callback' => 'camp_landing_track',
+        'access arguments' => array('access content'),
+    );
 
-return $items;
-
+    return $items;
 }
 
 /*
@@ -52,7 +51,6 @@ function camp_landing_block_info(){
  * Implements hook_block_view().
  */
 function camp_landing_block_view($delta = '') {
-
     $block = array();
     $campaign = campaign_landing_choose_campaign();
     //todo: select generic campaign if return false
@@ -66,7 +64,7 @@ function camp_landing_block_view($delta = '') {
         $promo = '<a href="/node/32"><img src="/sites/default/files/fromD6.png"/></a>';
         //todo: grab generic campaign img here
     }
-      $block['content'] = $promo;
+    $block['content'] = $promo;
 
     return $block;
 
@@ -80,35 +78,30 @@ function camp_landing_block_view($delta = '') {
 function camp_landing_settings() {
     global $base_url;
     $query = db_select('node', 'n');
-        $query->fields('n', array('title', 'nid'));
-        $query->condition('type', 'campaign');
-        $result = $query->execute();
-        foreach($result as $key=>$value){
-            $options[$value->nid] = $value->title . ' ' . l('view >', $base_url . '/node/' . $value->nid, array('attributes' => array('target' => '_blank')));
-        }
-        if(!empty($options)){
-            $form['camp_default'] = array(
-                '#default_value' => variable_get('camp_default'),
-                '#type' => 'radios',
-                '#options' => $options,
-                '#title' => t('Choose Default Campaign'),
-                '#description' => t('This default campaign will be used if there are no matches when checking the source.'),
-            );
-            return system_settings_form($form, FALSE);
-        }else{
-            $form['camp_default'] = array(
-                '#markup' => t('You must first <a href="/node/add/campaign">create a campaign</a>'),
-            );
-                        return $form;
-
-            }
-
-
-
+    $query->fields('n', array('title', 'nid'));
+    $query->condition('type', 'campaign');
+    $result = $query->execute();
+    foreach($result as $key=>$value){
+        $options[$value->nid] = $value->title . ' ' . l('view >', $base_url . '/node/' . $value->nid, array('attributes' => array('target' => '_blank')));
+    }
+    if(!empty($options)){
+        $form['camp_default'] = array(
+            '#default_value' => variable_get('camp_default'),
+            '#type' => 'radios',
+            '#options' => $options,
+            '#title' => t('Choose Default Campaign'),
+            '#description' => t('This default campaign will be used if there are no matches when checking the source.'),
+        );
+        return system_settings_form($form, FALSE);
+    }else{
+        $form['camp_default'] = array(
+            '#markup' => t('You must first <a href="/node/add/campaign">create a campaign</a>'),
+        );
+        return $form;
+    }
 }
 function camp_landing_track(){
     $output = '';
-
     return null;
 }
 
@@ -130,6 +123,7 @@ function camp_landing_init(){
  * @func determine the campaign to show in the home page block
  * @return false if no match, entity_id of campaign if match
  */
+
 function campaign_landing_choose_campaign(){
     $source_match = false;
     $campaign = variable_get('camp_default');
@@ -163,7 +157,7 @@ function camp_landing_theme() {
             'render element' => 'camp_landing',
             //'path' => drupal_get_path('module', 'camp_landing') . '/templates',
             //'variables' => array('form' => NULL,),
-            ),
+        ),
     );
     return $theme;
 }
@@ -184,24 +178,24 @@ function camp_landing_node_view($node, $view_mode) {
         $path = $item['href'];
         $path = drupal_get_path_alias($path);
         $vars = array(
-        'camp_form_url' => $base_url . '/' . $path,
-        'camp_name' => $node->title,
-        'camp_src' => $node->field_camp_src[$node->language][0]['value'],
-        'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
-        'camp_type' => $node->field_camp_type[$node->language][0]['value'],
-        'camp_phone' => $node->field_camp_phone[$node->language][0]['value'],
-        'camp_offer_txt' => $node->field_camp_offer_txt[$node->language][0]['value'],
-        'camp_media' => $node->field_camp_media[$node->language][0]['value'],
-        'camp_term' => $node->field_camp_term[$node->language][0]['value'],
-        'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
+            'camp_form_url' => $base_url . '/' . $path,
+            'camp_name' => $node->title,
+            'camp_src' => $node->field_camp_src[$node->language][0]['value'],
+            'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
+            'camp_type' => $node->field_camp_type[$node->language][0]['value'],
+            'camp_phone' => $node->field_camp_phone[$node->language][0]['value'],
+            'camp_offer_txt' => $node->field_camp_offer_txt[$node->language][0]['value'],
+            'camp_media' => $node->field_camp_media[$node->language][0]['value'],
+            'camp_term' => $node->field_camp_term[$node->language][0]['value'],
+            'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
 
         );
         $form = drupal_get_form('campaign_landing_form', $vars);
 
         // Add the output to the node.
         $node->content['camp_landing'] = array(
-        '#theme' => 'camp_landing_view',
-        '#form' => $form,
+            '#theme' => 'camp_landing_view',
+            '#form' => $form,
         );
     }
 
@@ -238,7 +232,7 @@ function camp_landing_form_alter(&$form, &$form_state, $form_id){
 function camp_landing_preprocess_page(&$vars){
 
     if((arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'campaign') || (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'edit')){
-            drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_gen_url.js');
+        drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_gen_url.js');
 
     }
 }
@@ -265,15 +259,15 @@ function campaign_landing_form($form, &$form_state, $vars){
     }
     $form['#prefix'] = '<div id="camp_request">    <div class="left">
         <div class="left-top">
-            <div><img src="/' . $top_left_img . '"/></div>
+        <div><img src="/' . $top_left_img . '"/></div>
         </div>
         <div class="left-bottom">
-            <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
+        <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
         </div>
-    </div>
-    <div class="right">';
+        </div>
+        <div class="right">';
     $form['table_begin'] = array(
-    '#markup' => t('<table id ="nexersys-form-fields">'),
+        '#markup' => t('<table id ="nexersys-form-fields">'),
     );
     //hidden form elements
     $form['camp_name'] = array(
@@ -284,12 +278,12 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#type' => 'hidden',
         '#value' => $vars['camp_form_url'],
     );
-    
+
     $form['returnURL'] = array(
         '#type' => 'hidden',
         '#value' => 'http://www.nexersys.com/thank-you',
     );
-    
+
     $form['first_name'] = array(
         '#prefix' => t('<tr><td class="label">First Name*</td><td>'),
         '#type' => 'textfield',
@@ -310,7 +304,7 @@ function campaign_landing_form($form, &$form_state, $vars){
     );
 
     if($camp_types[$vars['camp_type']] == 'commercial'){
-            $form['company'] = array(
+        $form['company'] = array(
             '#prefix' => t('<tr><td class="label">Company Name*</td><td>'),
             '#type' => 'textfield',
             '#title' => 'Company Name',
@@ -328,15 +322,15 @@ function campaign_landing_form($form, &$form_state, $vars){
     }else{
         //visitor has to choose, make it a select form.
         $form['model'] = array(
-        '#prefix' => t('<tr><td class="label">Model Type*</td><td>'),
-        '#type' => 'select',
-        '#options' => $clean_camp_types,
-        '#title' => 'Model Type',
-        '#required' => true,
-        '#attributes' => array('class' => array('nexersys validate[required]'),),
-        '#title_display' => 'invisible',
-        '#suffix' => t('</td></tr>'),
-    );
+            '#prefix' => t('<tr><td class="label">Model Type*</td><td>'),
+            '#type' => 'select',
+            '#options' => $clean_camp_types,
+            '#title' => 'Model Type',
+            '#required' => true,
+            '#attributes' => array('class' => array('nexersys validate[required]'),),
+            '#title_display' => 'invisible',
+            '#suffix' => t('</td></tr>'),
+        );
     }
     $form['phone'] = array(
         '#prefix' => t('<tr><td class="label">Phone Number*</td><td>'),
@@ -347,7 +341,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['email'] = array(
+    $form['email'] = array(
         '#prefix' => t('<tr><td class="label">eMail Address*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Email Address',
@@ -356,7 +350,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['zip'] = array(
+    $form['zip'] = array(
         '#prefix' => t('<tr><td class="label">Zip Code*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Zip Code',
@@ -365,7 +359,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['country'] = array(
+    $form['country'] = array(
         '#prefix' => t("<tr><td class='label'>I'm Located in the*</td><td>"),
         '#type' => 'select',
         '#options' => get_country_options(),
@@ -375,7 +369,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-        $form['questions'] = array(
+    $form['questions'] = array(
         '#prefix' => t('<tr><td class="label">Questions</td><td>'),
         '#type' => 'textarea',
         '#title' => 'Questions',
@@ -395,20 +389,20 @@ function campaign_landing_form($form, &$form_state, $vars){
     return $form;
 }
 function campaign_landing_form_submit($form, &$form_state){
-$data = camp_landing_gen_post_data($form_state['values']);    
+    $data = camp_landing_gen_post_data($form_state['values']);
 
-$url = 'https://crm.zoho.com/crm/WebToLeadForm';
+    $url = 'https://crm.zoho.com/crm/WebToLeadForm';
 
     $options = array(
-                'method' => 'POST',
-                'data' => $data,
-                'timeout' => 15,
-                'headers' => array('Content-Type' => 'application/x-www-form-urlencoded'),
-        );
+        'method' => 'POST',
+        'data' => $data,
+        'timeout' => 15,
+        'headers' => array('Content-Type' => 'application/x-www-form-urlencoded'),
+    );
     drupal_http_request($url, $options);
-    
+
     /*
-     * 
+     *
      x* LEADCF13=Nexersys.com+Commercial+Form
      x* &LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment
      x* &LEADCF1=Nexersys.com+Commercial+Form
@@ -430,7 +424,7 @@ $url = 'https://crm.zoho.com/crm/WebToLeadForm';
      x* &LEADCF23=United+States
      x* &LEADCF28=test
      */
-    
+
     drupal_goto($form_state['values']['returnURL']);
 }
 function camp_landing_gen_post_data($form_values){
@@ -450,8 +444,8 @@ function camp_landing_gen_post_data($form_values){
         $data .= !empty($form_values['company']) ? '&LEADCF24=' . urlencode($form_values['company']) : ''; //company
         $data .= '&xnQsjsdp=' . urlencode('dhOYVrEbdmJthYo*kRl79w$$');
         $data .= '&xmIwtLD=' . urlencode('xxtEl*Hx2ByNU*uyPq3OMHBogz4VdScW');
-        
-        
+
+
     }else{
         $data .= '&LEADCF15=' . urlencode($form_values['model']); //model
         $data .= '&LEADCF14=' . urlencode($form_values['camp_form_url']); //form url
@@ -460,7 +454,7 @@ function camp_landing_gen_post_data($form_values){
         $data .= '&LEADCF23='. urlencode($form_values['country']); //country
         $data .= '&xnQsjsdp='. urlencode('f1LzxolSe-0$');
         $data .= '&xmIwtLD=' . urlencode('82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O');
-        
+
     }
     $time = time();
     $data .= '&LEADCF92ampm=' . date('A', $time);
@@ -474,280 +468,252 @@ function camp_landing_gen_post_data($form_values){
     $data .= '&Last+Name=' . urlencode($form_values['last_name']);
     $data .= '&Email=' . urlencode($form_values['email']);
     $data .= '&Zip+Code=' . urlencode($form_values['zip']);
-    
     $data = substr($data, 1);
-    
-/*
-		
-		
-xCF15	model_type	zohoHome
-xCF3	model_type	zohoCommercial
-xCF24	company name	zohoCommercial
-xCF10	questions	zohoCommercial
-xCF1	hidden camp_info	zohoCommercial
-xCF11	country	zohoCommercial
-xCF92hour	hours hidden	
-xCF92minute	minute hidden	
-xCF92	datestr hidden	
-xCF92ampm	ampm hidden
-xCF5	hidden base_url	zohoCommercial
 
-
-xCF29	company name	zohoHome
-xCF23	country	zohoHome
-xCF28	questions	zohoHome
-
-	
-		
-		
-xCF14	hidden base_url	zohoHome
-xCF13	hidden camp_info	zohoHome*/
-   
-    //debug($data);
     return $data;
-   
+
 }
 function get_country_options(){
     return array(
-  'United States' => 'United States',
-  'United Kingdom' => 'United Kingdom',
-  'Afghanistan' => 'Afghanistan',
-  'Aland Islands' => 'Aland Islands',
-  'Albania' => 'Albania',
-  'Algeria' => 'Algeria',
-  'American Samoa' => 'American Samoa',
-  'Andorra' => 'Andorra',
-  'Angola' => 'Angola',
-  'Anguilla' => 'Anguilla',
-  'Antarctica' => 'Antarctica',
-  'Antigua & Barbuda' => 'Antigua & Barbuda',
-  'Argentina' => 'Argentina',
-  'Armenia' => 'Armenia',
-  'Aruba' => 'Aruba',
-  'Australia' => 'Australia',
-  'Austria' => 'Austria',
-  'Azerbaijan' => 'Azerbaijan',
-  'Bahamas' => 'Bahamas',
-  'Bahrain' => 'Bahrain',
-  'Bangladesh' => 'Bangladesh',
-  'Barbados' => 'Barbados',
-  'Belarus' => 'Belarus',
-  'Belgium' => 'Belgium',
-  'Belize' => 'Belize',
-  'Benin' => 'Benin',
-  'Bermuda' => 'Bermuda',
-  'Bhutan' => 'Bhutan',
-  'Bolivia' => 'Bolivia',
-  'Bosnia & Herzegovina' => 'Bosnia & Herzegovina',
-  'Botswana' => 'Botswana',
-  'Bouvet Island' => 'Bouvet Island',
-  'Brazil' => 'Brazil',
-  'British IOT' => 'British IOT',
-  'Brunei Darussalam' => 'Brunei Darussalam',
-  'Bulgaria' => 'Bulgaria',
-  'Burkina Faso' => 'Burkina Faso',
-  'Burundi' => 'Burundi',
-  'Cambodia' => 'Cambodia',
-  'Cameroon' => 'Cameroon',
-  'Canada' => 'Canada',
-  'Cape Verde' => 'Cape Verde',
-  'Cayman Islands' => 'Cayman Islands',
-  'Central African Republic' => 'Central African Republic',
-  'Chad' => 'Chad',
-  'Chile' => 'Chile',
-  'China' => 'China',
-  'Christmas Island' => 'Christmas Island',
-  'Cocos (Keeling) Islands' => 'Cocos (Keeling) Islands',
-  'Colombia' => 'Colombia',
-  'Comoros' => 'Comoros',
-  'Congo' => 'Congo',
-  'The DR of' => 'The DR of',
-  'Cook Islands' => 'Cook Islands',
-  'Costa Rica' => 'Costa Rica',
-  'Croatia' => 'Croatia',
-  'Cuba' => 'Cuba',
-  'Cyprus' => 'Cyprus',
-  'Czech Republic' => 'Czech Republic',
-  'Denmark' => 'Denmark',
-  'Djibouti' => 'Djibouti',
-  'Dominica' => 'Dominica',
-  'Dominican Republic' => 'Dominican Republic',
-  'Ecuador' => 'Ecuador',
-  'Egypt' => 'Egypt',
-  'El Salvador' => 'El Salvador',
-  'Equatorial Guinea' => 'Equatorial Guinea',
-  'Eritrea' => 'Eritrea',
-  'Estonia' => 'Estonia',
-  'Ethiopia' => 'Ethiopia',
-  'Falkland Islands (Malvinas)' => 'Falkland Islands (Malvinas)',
-  'Faroe Islands' => 'Faroe Islands',
-  'Fiji' => 'Fiji',
-  'Finland' => 'Finland',
-  'France' => 'France',
-  'French Guiana' => 'French Guiana',
-  'French Polynesia' => 'French Polynesia',
-  'French Southern Territories' => 'French Southern Territories',
-  'Gabon' => 'Gabon',
-  'Gambia' => 'Gambia',
-  'Georgia' => 'Georgia',
-  'Germany' => 'Germany',
-  'Ghana' => 'Ghana',
-  'Gibraltar' => 'Gibraltar',
-  'Greece' => 'Greece',
-  'Greenland' => 'Greenland',
-  'Grenada' => 'Grenada',
-  'Guadeloupe' => 'Guadeloupe',
-  'Guam' => 'Guam',
-  'Guatemala' => 'Guatemala',
-  'Guinea' => 'Guinea',
-  'Guinea-Bissau' => 'Guinea-Bissau',
-  'Guyana' => 'Guyana',
-  'Haiti' => 'Haiti',
-  'Heard & Mcdonald Islands' => 'Heard & Mcdonald Islands',
-  'Honduras' => 'Honduras',
-  'Hong Kong' => 'Hong Kong',
-  'Hungary' => 'Hungary',
-  'Iceland' => 'Iceland',
-  'India' => 'India',
-  'Indonesia' => 'Indonesia',
-  'Iran' => 'Iran',
-  'Iraq' => 'Iraq',
-  'Ireland' => 'Ireland',
-  'Israel' => 'Israel',
-  'Italy' => 'Italy',
-  'Jamaica' => 'Jamaica',
-  'Japan' => 'Japan',
-  'Jordan' => 'Jordan',
-  'Kazakhstan' => 'Kazakhstan',
-  'Kenya' => 'Kenya',
-  'Kiribati' => 'Kiribati',
-  'Korea' => 'Korea',
-  'DPR of' => 'DPR of',
-  'Kuwait' => 'Kuwait',
-  'Kyrgyzstan' => 'Kyrgyzstan',
-  'Lao PDR' => 'Lao PDR',
-  'Latvia' => 'Latvia',
-  'Lebanon' => 'Lebanon',
-  'Lesotho' => 'Lesotho',
-  'Liberia' => 'Liberia',
-  'Libyan Arab Jamahiriya' => 'Libyan Arab Jamahiriya',
-  'Liechtenstein' => 'Liechtenstein',
-  'Lithuania' => 'Lithuania',
-  'Luxembourg' => 'Luxembourg',
-  'Macao' => 'Macao',
-  'Macedonia' => 'Macedonia',
-  'Madagascar' => 'Madagascar',
-  'Malawi' => 'Malawi',
-  'Malaysia' => 'Malaysia',
-  'Maldives' => 'Maldives',
-  'Mali' => 'Mali',
-  'Malta' => 'Malta',
-  'Marshall Islands' => 'Marshall Islands',
-  'Martinique' => 'Martinique',
-  'Mauritania' => 'Mauritania',
-  'Mauritius' => 'Mauritius',
-  'Mayotte' => 'Mayotte',
-  'Mexico' => 'Mexico',
-  'Micronesia' => 'Micronesia',
-  'Moldova' => 'Moldova',
-  'Monaco' => 'Monaco',
-  'Mongolia' => 'Mongolia',
-  'Montserrat' => 'Montserrat',
-  'Morocco' => 'Morocco',
-  'Mozambique' => 'Mozambique',
-  'Myanmar' => 'Myanmar',
-  'Namibia' => 'Namibia',
-  'Nauru' => 'Nauru',
-  'Nepal' => 'Nepal',
-  'Netherlands' => 'Netherlands',
-  'Netherlands Antilles' => 'Netherlands Antilles',
-  'New Caledonia' => 'New Caledonia',
-  'New Zealand' => 'New Zealand',
-  'Nicaragua' => 'Nicaragua',
-  'Niger' => 'Niger',
-  'Nigeria' => 'Nigeria',
-  'Niue' => 'Niue',
-  'Norfolk Island' => 'Norfolk Island',
-  'Northern Mariana Islands' => 'Northern Mariana Islands',
-  'Norway' => 'Norway',
-  'Oman' => 'Oman',
-  'Pakistan' => 'Pakistan',
-  'Palau' => 'Palau',
-  'Palestinian Territory' => 'Palestinian Territory',
-  'Panama' => 'Panama',
-  'Papua New Guinea' => 'Papua New Guinea',
-  'Paraguay' => 'Paraguay',
-  'Peru' => 'Peru',
-  'Philippines' => 'Philippines',
-  'Pitcairn' => 'Pitcairn',
-  'Poland' => 'Poland',
-  'Portugal' => 'Portugal',
-  'Puerto Rico' => 'Puerto Rico',
-  'Qatar' => 'Qatar',
-  'Réunion' => 'Réunion',
-  'Romania' => 'Romania',
-  'Russian Federation' => 'Russian Federation',
-  'Rwanda' => 'Rwanda',
-  'Saint Helena' => 'Saint Helena',
-  'Saint Kitts & Nevis' => 'Saint Kitts & Nevis',
-  'Saint Lucia' => 'Saint Lucia',
-  'Saint Pierre & Miquelon' => 'Saint Pierre & Miquelon',
-  'Saint Vincent & The Grenadines' => 'Saint Vincent & The Grenadines',
-  'Samoa' => 'Samoa',
-  'San Marino' => 'San Marino',
-  'Sao Tome & Principe' => 'Sao Tome & Principe',
-  'Saudi Arabia' => 'Saudi Arabia',
-  'Scotland' => 'Scotland',
-  'Senegal' => 'Senegal',
-  'Serbia & Montenegro' => 'Serbia & Montenegro',
-  'Seychelles' => 'Seychelles',
-  'Sierra Leone' => 'Sierra Leone',
-  'Singapore' => 'Singapore',
-  'Slovakia' => 'Slovakia',
-  'Slovenia' => 'Slovenia',
-  'Solomon Islands' => 'Solomon Islands',
-  'Somalia' => 'Somalia',
-  'South Africa' => 'South Africa',
-  'South Georgia & The SSI' => 'South Georgia & The SSI',
-  'Spain' => 'Spain',
-  'Sri Lanka' => 'Sri Lanka',
-  'Sudan' => 'Sudan',
-  'Suriname' => 'Suriname',
-  'Svalbard & Jan Mayen' => 'Svalbard & Jan Mayen',
-  'Swaziland' => 'Swaziland',
-  'Sweden' => 'Sweden',
-  'Switzerland' => 'Switzerland',
-  'Syrian Arab Republic' => 'Syrian Arab Republic',
-  'Taiwan' => 'Taiwan',
-  'Tajikistan' => 'Tajikistan',
-  'Tanzania' => 'Tanzania',
-  'Thailand' => 'Thailand',
-  'Timor-Leste' => 'Timor-Leste',
-  'Togo' => 'Togo',
-  'Tokelau' => 'Tokelau',
-  'Tonga' => 'Tonga',
-  'Trinidad & Tobago' => 'Trinidad & Tobago',
-  'Tunisia' => 'Tunisia',
-  'Turkey' => 'Turkey',
-  'Turkmenistan' => 'Turkmenistan',
-  'Turks & Caicos Islands' => 'Turks & Caicos Islands',
-  'Tuvalu' => 'Tuvalu',
-  'Uganda' => 'Uganda',
-  'Ukraine' => 'Ukraine',
-  'United Arab Emirates' => 'United Arab Emirates',
-  'Uruguay' => 'Uruguay',
-  'Uzbekistan' => 'Uzbekistan',
-  'Vanuatu' => 'Vanuatu',
-  'Vatican City State' => 'Vatican City State',
-  'Venezuela' => 'Venezuela',
-  'Vietnam' => 'Vietnam',
-  'Virgin Islands' => 'Virgin Islands',
-  'British' => 'British',
-  'U.S.' => 'U.S.',
-  'Wallis & Futuna' => 'Wallis & Futuna',
-  'Western Sahara' => 'Western Sahara',
-  'Yemen' => 'Yemen',
-  'Zambia' => 'Zambia',
-  'Zimbabwe' => 'Zimbabwe',
+        'United States' => 'United States',
+        'United Kingdom' => 'United Kingdom',
+        'Afghanistan' => 'Afghanistan',
+        'Aland Islands' => 'Aland Islands',
+        'Albania' => 'Albania',
+        'Algeria' => 'Algeria',
+        'American Samoa' => 'American Samoa',
+        'Andorra' => 'Andorra',
+        'Angola' => 'Angola',
+        'Anguilla' => 'Anguilla',
+        'Antarctica' => 'Antarctica',
+        'Antigua & Barbuda' => 'Antigua & Barbuda',
+        'Argentina' => 'Argentina',
+        'Armenia' => 'Armenia',
+        'Aruba' => 'Aruba',
+        'Australia' => 'Australia',
+        'Austria' => 'Austria',
+        'Azerbaijan' => 'Azerbaijan',
+        'Bahamas' => 'Bahamas',
+        'Bahrain' => 'Bahrain',
+        'Bangladesh' => 'Bangladesh',
+        'Barbados' => 'Barbados',
+        'Belarus' => 'Belarus',
+        'Belgium' => 'Belgium',
+        'Belize' => 'Belize',
+        'Benin' => 'Benin',
+        'Bermuda' => 'Bermuda',
+        'Bhutan' => 'Bhutan',
+        'Bolivia' => 'Bolivia',
+        'Bosnia & Herzegovina' => 'Bosnia & Herzegovina',
+        'Botswana' => 'Botswana',
+        'Bouvet Island' => 'Bouvet Island',
+        'Brazil' => 'Brazil',
+        'British IOT' => 'British IOT',
+        'Brunei Darussalam' => 'Brunei Darussalam',
+        'Bulgaria' => 'Bulgaria',
+        'Burkina Faso' => 'Burkina Faso',
+        'Burundi' => 'Burundi',
+        'Cambodia' => 'Cambodia',
+        'Cameroon' => 'Cameroon',
+        'Canada' => 'Canada',
+        'Cape Verde' => 'Cape Verde',
+        'Cayman Islands' => 'Cayman Islands',
+        'Central African Republic' => 'Central African Republic',
+        'Chad' => 'Chad',
+        'Chile' => 'Chile',
+        'China' => 'China',
+        'Christmas Island' => 'Christmas Island',
+        'Cocos (Keeling) Islands' => 'Cocos (Keeling) Islands',
+        'Colombia' => 'Colombia',
+        'Comoros' => 'Comoros',
+        'Congo' => 'Congo',
+        'The DR of' => 'The DR of',
+        'Cook Islands' => 'Cook Islands',
+        'Costa Rica' => 'Costa Rica',
+        'Croatia' => 'Croatia',
+        'Cuba' => 'Cuba',
+        'Cyprus' => 'Cyprus',
+        'Czech Republic' => 'Czech Republic',
+        'Denmark' => 'Denmark',
+        'Djibouti' => 'Djibouti',
+        'Dominica' => 'Dominica',
+        'Dominican Republic' => 'Dominican Republic',
+        'Ecuador' => 'Ecuador',
+        'Egypt' => 'Egypt',
+        'El Salvador' => 'El Salvador',
+        'Equatorial Guinea' => 'Equatorial Guinea',
+        'Eritrea' => 'Eritrea',
+        'Estonia' => 'Estonia',
+        'Ethiopia' => 'Ethiopia',
+        'Falkland Islands (Malvinas)' => 'Falkland Islands (Malvinas)',
+        'Faroe Islands' => 'Faroe Islands',
+        'Fiji' => 'Fiji',
+        'Finland' => 'Finland',
+        'France' => 'France',
+        'French Guiana' => 'French Guiana',
+        'French Polynesia' => 'French Polynesia',
+        'French Southern Territories' => 'French Southern Territories',
+        'Gabon' => 'Gabon',
+        'Gambia' => 'Gambia',
+        'Georgia' => 'Georgia',
+        'Germany' => 'Germany',
+        'Ghana' => 'Ghana',
+        'Gibraltar' => 'Gibraltar',
+        'Greece' => 'Greece',
+        'Greenland' => 'Greenland',
+        'Grenada' => 'Grenada',
+        'Guadeloupe' => 'Guadeloupe',
+        'Guam' => 'Guam',
+        'Guatemala' => 'Guatemala',
+        'Guinea' => 'Guinea',
+        'Guinea-Bissau' => 'Guinea-Bissau',
+        'Guyana' => 'Guyana',
+        'Haiti' => 'Haiti',
+        'Heard & Mcdonald Islands' => 'Heard & Mcdonald Islands',
+        'Honduras' => 'Honduras',
+        'Hong Kong' => 'Hong Kong',
+        'Hungary' => 'Hungary',
+        'Iceland' => 'Iceland',
+        'India' => 'India',
+        'Indonesia' => 'Indonesia',
+        'Iran' => 'Iran',
+        'Iraq' => 'Iraq',
+        'Ireland' => 'Ireland',
+        'Israel' => 'Israel',
+        'Italy' => 'Italy',
+        'Jamaica' => 'Jamaica',
+        'Japan' => 'Japan',
+        'Jordan' => 'Jordan',
+        'Kazakhstan' => 'Kazakhstan',
+        'Kenya' => 'Kenya',
+        'Kiribati' => 'Kiribati',
+        'Korea' => 'Korea',
+        'DPR of' => 'DPR of',
+        'Kuwait' => 'Kuwait',
+        'Kyrgyzstan' => 'Kyrgyzstan',
+        'Lao PDR' => 'Lao PDR',
+        'Latvia' => 'Latvia',
+        'Lebanon' => 'Lebanon',
+        'Lesotho' => 'Lesotho',
+        'Liberia' => 'Liberia',
+        'Libyan Arab Jamahiriya' => 'Libyan Arab Jamahiriya',
+        'Liechtenstein' => 'Liechtenstein',
+        'Lithuania' => 'Lithuania',
+        'Luxembourg' => 'Luxembourg',
+        'Macao' => 'Macao',
+        'Macedonia' => 'Macedonia',
+        'Madagascar' => 'Madagascar',
+        'Malawi' => 'Malawi',
+        'Malaysia' => 'Malaysia',
+        'Maldives' => 'Maldives',
+        'Mali' => 'Mali',
+        'Malta' => 'Malta',
+        'Marshall Islands' => 'Marshall Islands',
+        'Martinique' => 'Martinique',
+        'Mauritania' => 'Mauritania',
+        'Mauritius' => 'Mauritius',
+        'Mayotte' => 'Mayotte',
+        'Mexico' => 'Mexico',
+        'Micronesia' => 'Micronesia',
+        'Moldova' => 'Moldova',
+        'Monaco' => 'Monaco',
+        'Mongolia' => 'Mongolia',
+        'Montserrat' => 'Montserrat',
+        'Morocco' => 'Morocco',
+        'Mozambique' => 'Mozambique',
+        'Myanmar' => 'Myanmar',
+        'Namibia' => 'Namibia',
+        'Nauru' => 'Nauru',
+        'Nepal' => 'Nepal',
+        'Netherlands' => 'Netherlands',
+        'Netherlands Antilles' => 'Netherlands Antilles',
+        'New Caledonia' => 'New Caledonia',
+        'New Zealand' => 'New Zealand',
+        'Nicaragua' => 'Nicaragua',
+        'Niger' => 'Niger',
+        'Nigeria' => 'Nigeria',
+        'Niue' => 'Niue',
+        'Norfolk Island' => 'Norfolk Island',
+        'Northern Mariana Islands' => 'Northern Mariana Islands',
+        'Norway' => 'Norway',
+        'Oman' => 'Oman',
+        'Pakistan' => 'Pakistan',
+        'Palau' => 'Palau',
+        'Palestinian Territory' => 'Palestinian Territory',
+        'Panama' => 'Panama',
+        'Papua New Guinea' => 'Papua New Guinea',
+        'Paraguay' => 'Paraguay',
+        'Peru' => 'Peru',
+        'Philippines' => 'Philippines',
+        'Pitcairn' => 'Pitcairn',
+        'Poland' => 'Poland',
+        'Portugal' => 'Portugal',
+        'Puerto Rico' => 'Puerto Rico',
+        'Qatar' => 'Qatar',
+        'Réunion' => 'Réunion',
+        'Romania' => 'Romania',
+        'Russian Federation' => 'Russian Federation',
+        'Rwanda' => 'Rwanda',
+        'Saint Helena' => 'Saint Helena',
+        'Saint Kitts & Nevis' => 'Saint Kitts & Nevis',
+        'Saint Lucia' => 'Saint Lucia',
+        'Saint Pierre & Miquelon' => 'Saint Pierre & Miquelon',
+        'Saint Vincent & The Grenadines' => 'Saint Vincent & The Grenadines',
+        'Samoa' => 'Samoa',
+        'San Marino' => 'San Marino',
+        'Sao Tome & Principe' => 'Sao Tome & Principe',
+        'Saudi Arabia' => 'Saudi Arabia',
+        'Scotland' => 'Scotland',
+        'Senegal' => 'Senegal',
+        'Serbia & Montenegro' => 'Serbia & Montenegro',
+        'Seychelles' => 'Seychelles',
+        'Sierra Leone' => 'Sierra Leone',
+        'Singapore' => 'Singapore',
+        'Slovakia' => 'Slovakia',
+        'Slovenia' => 'Slovenia',
+        'Solomon Islands' => 'Solomon Islands',
+        'Somalia' => 'Somalia',
+        'South Africa' => 'South Africa',
+        'South Georgia & The SSI' => 'South Georgia & The SSI',
+        'Spain' => 'Spain',
+        'Sri Lanka' => 'Sri Lanka',
+        'Sudan' => 'Sudan',
+        'Suriname' => 'Suriname',
+        'Svalbard & Jan Mayen' => 'Svalbard & Jan Mayen',
+        'Swaziland' => 'Swaziland',
+        'Sweden' => 'Sweden',
+        'Switzerland' => 'Switzerland',
+        'Syrian Arab Republic' => 'Syrian Arab Republic',
+        'Taiwan' => 'Taiwan',
+        'Tajikistan' => 'Tajikistan',
+        'Tanzania' => 'Tanzania',
+        'Thailand' => 'Thailand',
+        'Timor-Leste' => 'Timor-Leste',
+        'Togo' => 'Togo',
+        'Tokelau' => 'Tokelau',
+        'Tonga' => 'Tonga',
+        'Trinidad & Tobago' => 'Trinidad & Tobago',
+        'Tunisia' => 'Tunisia',
+        'Turkey' => 'Turkey',
+        'Turkmenistan' => 'Turkmenistan',
+        'Turks & Caicos Islands' => 'Turks & Caicos Islands',
+        'Tuvalu' => 'Tuvalu',
+        'Uganda' => 'Uganda',
+        'Ukraine' => 'Ukraine',
+        'United Arab Emirates' => 'United Arab Emirates',
+        'Uruguay' => 'Uruguay',
+        'Uzbekistan' => 'Uzbekistan',
+        'Vanuatu' => 'Vanuatu',
+        'Vatican City State' => 'Vatican City State',
+        'Venezuela' => 'Venezuela',
+        'Vietnam' => 'Vietnam',
+        'Virgin Islands' => 'Virgin Islands',
+        'British' => 'British',
+        'U.S.' => 'U.S.',
+        'Wallis & Futuna' => 'Wallis & Futuna',
+        'Western Sahara' => 'Western Sahara',
+        'Yemen' => 'Yemen',
+        'Zambia' => 'Zambia',
+        'Zimbabwe' => 'Zimbabwe',
     );
 }
