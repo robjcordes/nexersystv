@@ -62,9 +62,8 @@ function camp_landing_install() {
             'field_name' => 'field_camp_img_1',
             'type' => 'image',
         ),
-
         
-        array(
+       array(
       'field_name' => 'camp_default_img',
       'type' => 'file',
       'module' => 'file',
@@ -84,6 +83,7 @@ function camp_landing_install() {
         field_create_field($value);
     }
     $instances = array(
+
                 array(
             'field_name' => 'field_camp_website', 
             'entity_type' => 'node', 
@@ -348,6 +348,7 @@ function camp_landing_uninstall(){
         field_delete_field('field_gen_url');
         field_delete_field('field_camp_img_1');
         field_delete_field('camp_default_img');
+        field_delete_field('field_camp_fieldset');
 
 }
 ?>

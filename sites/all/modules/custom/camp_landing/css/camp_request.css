@@ -1,4 +1,4 @@
-#nex_request{
+#camp_request{
     font-family:Arial,Helvetica,Georgia,Sans-serif;
     width:960px;
     height:471px;
@@ -6,45 +6,45 @@
     float:left;
     position:relative;
 }
-#nex_request tbody{
+#camp_request tbody{
     border:none;
 }
-#nex_request tr td, #nex_request tr th{
+#camp_request tr td, #camp_request tr th{
     background:none;
     padding:0;
     border:none;
     color:white;
 }
-#nex_request input, #nex_request select{
+#camp_request input, #camp_request select{
     font-size:16px;
     padding:0;
     margin:3px;
 }
-#nex_request input{
+#camp_request input{
     width:200px;
 }
-#nex_request select{
+#camp_request select{
     width:207px;
 }
-#nex_request tr{
+#camp_request tr{
     background:none;
 }
-#nex_request .left{
+#camp_request .left{
     float:left;
     width:456px;
     height:471px;
 }
-#nex_request .left-top{
+#camp_request .left-top{
     height:299px;
 }
-#nex_request .left-bottom{
+#camp_request .left-bottom{
     background:url('/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png');
     float:left;
     clear:left;
     height:172px;
 }
 
-#nex_request .right{
+#camp_request .right{
     float:left;
     background:url('/sites/all/themes/nexersystv/form/img/nex-right-box3.png');
     height: 471px;
@@ -65,11 +65,11 @@
 #campaign-landing-form .down{
     background:url('/sites/all/themes/nexersystv/form/img/request-but-down.png');
 }
-#nex_request .hidden{
+#camp_request .hidden{
     display:none;
 }
 
-#nex_request table{
+#camp_request table{
     border-collapse:collapse;
 border:none;
     font-size:16px !important;
@@ -79,7 +79,7 @@ border:none;
     padding-right:10px;
     text-align:right;
 }
-#nex_request input{
+#camp_request input{
     height:24px;
 }
 #campaign-landing-form td {

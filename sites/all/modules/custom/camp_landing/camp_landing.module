@@ -1,7 +1,7 @@
 <?php
 /*
  * todo: admin page to select default campaign in case of no source match
- * 
+ *
  */
 function camp_landing_permission() {
   return array(
@@ -52,7 +52,7 @@ function camp_landing_block_info(){
  * Implements hook_block_view().
  */
 function camp_landing_block_view($delta = '') {
-    
+
     $block = array();
     $campaign = campaign_landing_choose_campaign();
     //todo: select generic campaign if return false
@@ -67,9 +67,9 @@ function camp_landing_block_view($delta = '') {
         //todo: grab generic campaign img here
     }
       $block['content'] = $promo;
-    
+
     return $block;
-  
+
 }
 
 /**
@@ -78,22 +78,37 @@ function camp_landing_block_view($delta = '') {
  * @see system_settings_form()
  */
 function camp_landing_settings() {
-    //todo: list all campaigs, select default
-   $form['camp_default_img'] = array(
-    //'#name' => 'files["test"]',
-    '#type' => 'file',
-    '#title' => t('Choose a file'),
-    //'#title_display' => 'invisible',
-    '#size' => 22,
-    '#theme_wrappers' => array(),
-    '#weight' => -10,
-  );
+    global $base_url;
+    $query = db_select('node', 'n');
+        $query->fields('n', array('title', 'nid'));
+        $query->condition('type', 'campaign');
+        $result = $query->execute();
+        foreach($result as $key=>$value){
+            $options[$value->nid] = $value->title . ' ' . l('view >', $base_url . '/node/' . $value->nid, array('attributes' => array('target' => '_blank')));
+        }
+        if(!empty($options)){
+            $form['camp_default'] = array(
+                '#default_value' => variable_get('camp_default'),
+                '#type' => 'radios',
+                '#options' => $options,
+                '#title' => t('Choose Default Campaign'),
+                '#description' => t('This default campaign will be used if there are no matches when checking the source.'),
+            );
+            return system_settings_form($form, FALSE);
+        }else{
+            $form['camp_default'] = array(
+                '#markup' => t('You must first <a href="/node/add/campaign">create a campaign</a>'),
+            );
+                        return $form;
 
-  return system_settings_form($form, FALSE);
+            }
+
+
+
 }
 function camp_landing_track(){
     $output = '';
-    
+
     return null;
 }
 
@@ -106,23 +121,23 @@ function _camp_types(){
  * Implementation of hook_init().
  */
 
-function camp_landing_init(){  
+function camp_landing_init(){
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
-    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');            
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');
 }
 
 /*
  * @func determine the campaign to show in the home page block
  * @return false if no match, entity_id of campaign if match
  */
-function campaign_landing_choose_campaign(){ 
+function campaign_landing_choose_campaign(){
     $source_match = false;
-    $campaign = false;
+    $campaign = variable_get('camp_default');
     $sources = array();
     $referrer = $_SERVER['HTTP_REFERER'];
     if(substr($referrer, -1) == '/'){
         $referrer = substr($referrer, 0, -1);
-    } 
+    }
     //debug('referrer: ' . $referrer);
         $query = db_select('field_data_field_camp_src', 'src');
         $query->fields('src', array('field_camp_src_value', 'entity_id'));
@@ -135,7 +150,6 @@ function campaign_landing_choose_campaign(){
         if($srcVal['src'] == $referrer){
             $source_match = true;
             $campaign = $srcVal['entity_id'];
-            
         }
     }
 
@@ -164,11 +178,11 @@ function camp_landing_node_view($node, $view_mode) {
     if($node->type == 'campaign'){
         global $base_url;
         drupal_add_css(drupal_get_path('module', 'camp_landing') . '/css/validationEngine.jquery.css');
-        drupal_add_css(drupal_get_path('module', 'camp_landing') . '/css/nex_request.css');
+        drupal_add_css(drupal_get_path('module', 'camp_landing') . '/css/camp_request.css');
         drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery.validationEngine-en.js');
         drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery.validationEngine.js');
         drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_landing.js');
-        $item = menu_get_item();    
+        $item = menu_get_item();
         $path = $item['href'];
         $path = drupal_get_path_alias($path);
         $vars = array(
@@ -201,23 +215,23 @@ function theme_camp_landing_view($variables){
 function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
+
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
+        //$form['field_camp_website']['und'][0]['value']['#parents'] = array('email');
         $form['field_camp_website']['und'][0]['value']['#attributes']['class'][] = 'utm_website';
-        
+
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'utm_src';
-        
+
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'utm_content';
-        
+
         $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'utm_media';
-        
+
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'utm_term';
-        
-        
-        
+
         $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a>';
         $form['field_gen_url']['und'][0]['value']['#attributes']['class'][] = 'genUrl';
         //debug($form['field_gen_url']['und'][0]['value']['#attributes']);
@@ -231,27 +245,45 @@ function camp_landing_preprocess_page(&$vars){
 
     }
 }
-
+function campaign_landing_form_pick_action($form_values){
+    $action = '';
+    return $action;
+}
 function campaign_landing_form($form, &$form_state, $vars){
     /*
      * todo: give control of required fields during campaign creation
      */
-    
+
     //debug($vars);
-    $form['#prefix'] = '<div id="nex_request">    <div class="left">
+    $camp_types = _camp_types();
+    $clean_camp_types = $camp_types;
+    array_shift($clean_camp_types);
+    debug($camp_types[$vars['camp_type']]);
+    if($camp_types[$vars['camp_type']] == 'commercial'){
+        $top_left_img = drupal_get_path('module', 'camp_landing') . '/img/nex-bro-comm.png';
+    }elseif($camp_types[$vars['camp_type']] == 'home'){
+        $top_left_img = drupal_get_path('module', 'camp_landing') . '/img/nex-bro-home.png';
+    }elseif($camp_types[$vars['camp_type']] == 'pro'){
+        $top_left_img = drupal_get_path('module', 'camp_landing') . '/img/nex-bro-pro.png';
+    }else{
+        $top_left_img = drupal_get_path('module', 'camp_landing') . '/img/nex-bro-home.png';
+    }
+    $form['#prefix'] = '<div id="camp_request">    <div class="left">
         <div class="left-top">
-            <div><img src="/sites/all/themes/nexersystv/form/img/nex-bro-home.png"/></div>
+            <div><img src="/' . $top_left_img . '"/></div>
         </div>
         <div class="left-bottom">
             <div><img src="/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png"/></div>
         </div>
     </div>
     <div class="right">';
-    $form['#method'] = 'post';
+    //$form['#method'] = 'get';
     //$form['#action'] = 'https://crm.zoho.com/crm/WebToLeadForm';
+    //$form['#action'] = 'http://google.com';
     $form['table_begin'] = array(
     '#markup' => t('<table id ="nexersys-form-fields">'),
     );
+    //hidden form elements
     $form['LEADCF13'] = array(
         '#type' => 'hidden',
         '#value' => $vars['camp_name'],
@@ -268,6 +300,11 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#type' => 'hidden',
         '#value' => $vars['camp_form_url'],
     );
+    $form['returnURL'] = array(
+        '#type' => 'hidden',
+        '#value' => 'http://www.nexersys.com/thank-you',
+    );
+    
     $form['FirstName'] = array(
         '#prefix' => t('<tr><td class="label">First Name*</td><td>'),
         '#type' => 'textfield',
@@ -286,9 +323,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
     );
-    $camp_types = _camp_types();
-    $clean_camp_types = $camp_types;
-    array_shift($clean_camp_types);
+
     if($camp_types[$vars['camp_type']] == 'commercial'){
             $form['LEADCF24'] = array(
             '#prefix' => t('<tr><td class="label">Company Name*</td><td>'),
@@ -302,8 +337,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
 
     }elseif($camp_types[$vars['camp_type']] == 'home'){
-                $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
-
+        $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
     }elseif($camp_types[$vars['camp_type']] == 'pro'){
         $form['LEADCF3'] = array('#type' => 'hidden', '#default_value' => $camp_types[$vars['camp_type']]);
     }else{
@@ -374,6 +408,25 @@ function campaign_landing_form($form, &$form_state, $vars){
     );
     $form['#suffix'] = '</table></div></div>';
     return $form;
+}
+function campaign_landing_form_submit($form, &$form_state){
+    $url = 'https://crm.zoho.com/crm/WebToLeadForm';
+    $data = 'LEADCF13=Nexersys.com+Commercial+Form&LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF1=Nexersys.com+Commercial+Form&LEADCF5=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF92=08%2F1%2F2012&LEADCF92hour=01&LEADCF92minute=30&LEADCF92ampm=PM&xnQsjsdp=f1LzxolSe-0%24&xmIwtLD=82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O&actionType=TGVhZHM%3D&returnURL=http%3A%2F%2Fwww.nexersys.com%2Fthank-you&First+Name=test&Last+Name=test&Phone=1231234&Email=test%40test.com&LEADCF15=home&Zip+Code=test&LEADCF23=United+States&LEADCF28=test';
+    //$url = 'http://www.citytheft.com';
+    $options = array(
+                'method' => 'POST',
+                'data' => $data,
+                'timeout' => 15,
+                'headers' => array('Content-Type' => 'application/x-www-form-urlencoded'),
+        );
+    drupal_http_request($url, $options);
+    
+    /*
+     * 
+     LEADCF13=Nexersys.com+Commercial+Form&LEADCF14=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF1=Nexersys.com+Commercial+Form&LEADCF5=http%3A%2F%2Fwww.nexersys.localhost%3A8888%2Ffitness-equipment%2Fcommercial-gym-equipment&LEADCF92=08%2F1%2F2012&LEADCF92hour=01&LEADCF92minute=30&LEADCF92ampm=PM&xnQsjsdp=f1LzxolSe-0%24&xmIwtLD=82AfV3HJwjp71g4ILMIYL*GCpUdN*P5O&actionType=TGVhZHM%3D&returnURL=http%3A%2F%2Fwww.nexersys.com%2Fthank-you&First+Name=test&Last+Name=test&Phone=1231234&Email=test%40test.com&LEADCF15=home&Zip+Code=test&LEADCF23=United+States&LEADCF28=test
+     */
+    
+    //drupal_goto('http://www.nexersys.com/thank-you');
 }
 function get_country_options(){
     return array(
@@ -618,7 +671,4 @@ function get_country_options(){
   'Zambia' => 'Zambia',
   'Zimbabwe' => 'Zimbabwe',
     );
-}
-function campaign_landing_form_submit($form, &$form_state){
-    //debug($form_state['values']);
 }

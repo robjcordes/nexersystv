@@ -5,7 +5,7 @@ $(document).ready(function() {
         $(this).toggleClass('down');
     });
     $('#campaign-landing-form .form-submit').click(function(event){
-        var country = $('#nex_request form #nex_request_country').val();
+        var country = $('#camp_request form #camp_request_country').val();
         nexReqForm.updateAction(country, nexReqForm.urlType);
         nexReqForm.showTestAlerts();
         //return false;
@@ -62,9 +62,9 @@ $(document).ready(function() {
 		'http://nexersys.com/club-solutions-august-2012-video-lp/',
 		'http://nexersys.com/club-solutions-august-2012-video-lp',
 		'http://nexersys.com/product/commercial', 'http://nexersys.com/product/commercial/',
-		
+
 		'http://nexersys.com/commercial-test', 'http://nexersys.com/commercial-test/'
-		
+
 		],
     proUrls : [
         'http://form.localhost:8888/pro.php',
@@ -79,13 +79,13 @@ $(document).ready(function() {
         var formValues = 'form name: ' + $('#campaign-landing-form').attr('name')
             + '\n URL Type: ' + nexReqForm.urlType
             + '\n Model Type: ' + nexReqForm.modelType
-            + '\n Country: ' + $('#nex_request form #nex_request_country').val()
-            + '\n Questions: ' + $('#nex_request form #questions').val()
-            + '\n model input name: ' + $('#nex_request form #model_type').attr('name')
-            + '\n country input name: ' + $('#nex_request form #nex_request_country').attr('name')
-            + '\n questions input name: ' + $('#nex_request form #questions').attr('name')
+            + '\n Country: ' + $('#camp_request form #camp_request_country').val()
+            + '\n Questions: ' + $('#camp_request form #questions').val()
+            + '\n model input name: ' + $('#camp_request form #model_type').attr('name')
+            + '\n country input name: ' + $('#camp_request form #camp_request_country').attr('name')
+            + '\n questions input name: ' + $('#camp_request form #questions').attr('name')
         ;
-        $('#nex_request form input').each(function(){
+        $('#camp_request form input').each(function(){
             formValues += '\n ' + $(this).val();
         });
         alert(formValues);
@@ -105,24 +105,24 @@ $(document).ready(function() {
     prepareForm : function(crmType){
         //change form names, change insert hidden input fields etc. here before submitting form
         if(crmType == 'zohoHome'){
-            $('#nex_request form').attr('name', this.formNameHome);
-            $('#nex_request table').prepend(this.hiddenHomeInput);
-            $('#nex_request #model_type').attr('name', 'LEADCF15');
-            $('#nex_request #CompanyName').attr('name', 'LEADCF29');
-            $('#nex_request #nex_request_country').attr('name', 'LEADCF23');
-            $('#nex_request #questions').attr('name', 'LEADCF28');
+            $('#camp_request form').attr('name', this.formNameHome);
+            $('#camp_request table').prepend(this.hiddenHomeInput);
+            $('#camp_request #model_type').attr('name', 'LEADCF15');
+            $('#camp_request #CompanyName').attr('name', 'LEADCF29');
+            $('#camp_request #camp_request_country').attr('name', 'LEADCF23');
+            $('#camp_request #questions').attr('name', 'LEADCF28');
         }else{
             //if not home, format input fields for commercial crm
-            $('#nex_request form').attr('name', this.formNameComm);
-            $('#nex_request table').prepend(this.hiddenCommInput);
-            $('#nex_request #model_type').attr('name', 'LEADCF3');
-            $('#nex_request #nex_request_country').attr('name', 'LEADCF11');
-            $('#nex_request #questions').attr('name', 'LEADCF10');
+            $('#camp_request form').attr('name', this.formNameComm);
+            $('#camp_request table').prepend(this.hiddenCommInput);
+            $('#camp_request #model_type').attr('name', 'LEADCF3');
+            $('#camp_request #camp_request_country').attr('name', 'LEADCF11');
+            $('#camp_request #questions').attr('name', 'LEADCF10');
         }
 
     },
     updateAction : function(country, urlType){
-                       this.modelType = $('#nex_request #model_type').val();
+                       this.modelType = $('#camp_request #model_type').val();
                        if(this.urlType == 'general'){
                            if((this.modelType == 'home' || this.modelType == 'pro') && country == 'United States'){
                                //zohoHome
@@ -148,7 +148,7 @@ $(document).ready(function() {
                             var day = currentTime.getDate();
                             var year = currentTime.getFullYear();
                             var hours = currentTime.getHours();
-                            
+
                             var minutes = currentTime.getMinutes();
                             if (minutes < 10){
                                 minutes = '0' + minutes;
@@ -188,11 +188,11 @@ $(document).ready(function() {
                      if(this.urlType == 'home'){
                          $('.model_type').addClass('hidden');
                          $('[name=LEADCF3]').addClass('hidden').val('home');
-                         $('#nex_request .left-top img').attr('src', 'http://nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-home.png');
+                         $('#camp_request .left-top img').attr('src', 'http://nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-home.png');
                      }else if(this.urlType == 'commercial'){
 						$('#campaign-landing-form textarea').css({'height':'45px'});
-						
-						$(this.companyNameInput).insertAfter('#nex_request table tr:eq(2)');
+
+						$(this.companyNameInput).insertAfter('#camp_request table tr:eq(2)');
 						//if($(location).attr('href') == 'http://nexersys.com/commercial-test/'){
 								if($.browser.msie && $.browser.version == 7.0){
 									//console.log('ie 7');
@@ -203,15 +203,15 @@ $(document).ready(function() {
 									//console.log('not ie');
 								}
 						//}
-                         $('.model_type').addClass('hidden');
-                         $('[name=LEADCF3]').addClass('hidden').val('commercial');
-                         $('#nex_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-comm.png');
+                         //$('.model_type').addClass('hidden');
+                         //$('[name=LEADCF3]').addClass('hidden').val('commercial');
+                         //$('#camp_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-comm.png');
                      }else if(this.urlType == 'pro'){
-                         $('.model_type').addClass('hidden');
+                         //$('.model_type').addClass('hidden');
                          $('[name=LEADCF3]').addClass('hidden').val('pro');
-                         $('#nex_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-pro.png');
+                         //$('#camp_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-pro.png');
                      }else{
-                         $('#nex_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-home.png');
+                         //$('#camp_request .left-top img').attr('src', 'http://www.nexersys.com/wp-content/themes/nexersys/form/img/nex-bro-home.png');
 						 $('.company_name').addClass('hidden');
 					     $('.company_name input').removeClass('validate[required]');
                      }
