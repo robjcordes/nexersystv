@@ -272,9 +272,6 @@ function campaign_landing_form($form, &$form_state, $vars){
         </div>
     </div>
     <div class="right">';
-    //$form['#method'] = 'get';
-    //$form['#action'] = 'https://crm.zoho.com/crm/WebToLeadForm';
-    //$form['#action'] = 'http://google.com';
     $form['table_begin'] = array(
     '#markup' => t('<table id ="nexersys-form-fields">'),
     );
@@ -288,7 +285,6 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#value' => $vars['camp_form_url'],
     );
     
-    
     $form['returnURL'] = array(
         '#type' => 'hidden',
         '#value' => 'http://www.nexersys.com/thank-you',
@@ -298,7 +294,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#prefix' => t('<tr><td class="label">First Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'First Name',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -307,7 +303,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#prefix' => t('<tr><td class="label">Last Name*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Last Name',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -318,7 +314,7 @@ function campaign_landing_form($form, &$form_state, $vars){
             '#prefix' => t('<tr><td class="label">Company Name*</td><td>'),
             '#type' => 'textfield',
             '#title' => 'Company Name',
-            //'#required' => true,
+            '#required' => true,
             '#attributes' => array('class' => array('nexersys validate[required]'),),
             '#title_display' => 'invisible',
             '#suffix' => t('</td></tr>'),
@@ -336,7 +332,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#type' => 'select',
         '#options' => $clean_camp_types,
         '#title' => 'Model Type',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -346,7 +342,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#prefix' => t('<tr><td class="label">Phone Number*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Phone Number',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -355,7 +351,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#prefix' => t('<tr><td class="label">eMail Address*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Email Address',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required,custom[email]]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -364,7 +360,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#prefix' => t('<tr><td class="label">Zip Code*</td><td>'),
         '#type' => 'textfield',
         '#title' => 'Zip Code',
-        //'#required' => true,
+        '#required' => true,
         '#attributes' => array('class' => array('nexersys validate[required]'),),
         '#title_display' => 'invisible',
         '#suffix' => t('</td></tr>'),
@@ -435,7 +431,7 @@ $url = 'https://crm.zoho.com/crm/WebToLeadForm';
      x* &LEADCF28=test
      */
     
-    //drupal_goto('http://www.nexersys.com/thank-you');
+    drupal_goto($form_state['returnURL']);
 }
 function camp_landing_gen_post_data($form_values){
     $data = '';
