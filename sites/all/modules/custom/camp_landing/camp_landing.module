@@ -208,9 +208,10 @@ function theme_camp_landing_view($variables){
 function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
+        debug(taxonomy_get_tree(taxonomy_get_vid_from_machine_name('campaign_types')));
         //debug($form['field_campaign_promo_main']);
-        debug(field_info_field('field_camp_type'));
-        //debug(field_info_instance('node', 'field_campaign_promo_main', 'campaign'));
+        //debug(field_info_field('field_camp_type'));
+        //debug(field_info_instance('node', 'field_camp_type', 'campaign'));
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
         //$form['field_camp_website']['und'][0]['value']['#parents'] = array('email');
         $form['field_camp_website']['und'][0]['value']['#attributes']['class'][] = 'utm_website';
@@ -232,6 +233,24 @@ function camp_landing_form_alter(&$form, &$form_state, $form_id){
     }
 }
 
+/*
+ * Grab a vocabulary vid given its machine name.
+ * 
+ * @param $machine_name
+ * The machine name of the vocabulary being searched for.
+ * @return
+ * The numeric $vid or false if machine name not present.
+ */
+function taxonomy_get_vid_from_machine_name($machine_name){
+    $vid = false;
+    $vocabs = taxonomy_get_vocabularies();
+    foreach($vocabs as $key=>$value){
+        if($value->machine_name == $machine_name){
+            $vid = $value->vid;
+        }
+    }
+    return $vid;
+}
 function camp_landing_preprocess_page(&$vars){
 
     if((arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'campaign') || (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'edit')){

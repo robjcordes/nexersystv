@@ -3,6 +3,7 @@ dependencies[] = "entity"
 dependencies[] = "entityreference"
 dependencies[] = "field_group"
 dependencies[] = "jquery_update"
+dependencies[] = "taxonomy"
 description = Customize campaigns and lead forms.
 core = 7.x
 version = "7.x-1.0"
