@@ -1,8 +1,6 @@
-sites/default/files
-sites/default/files/*
-sites/default/settings.php
-robots.txt
-Nexersystv_new_Resources
-Nexersystv_slider_Resources
-nbproject/private/
-nbproject
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/files
+sites/*/private

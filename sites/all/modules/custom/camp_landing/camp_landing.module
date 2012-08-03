@@ -1,4 +1,5 @@
 <?php
+//drush dis camp_landing -y; drush pm-uninstall camp_landing -y; drush en camp_landing -y;
 /*
  * todo: admin page to select default campaign in case of no source match
  *
@@ -207,7 +208,7 @@ function theme_camp_landing_view($variables){
 function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
-
+        //debug($form);
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
         //$form['field_camp_website']['und'][0]['value']['#parents'] = array('email');
         $form['field_camp_website']['und'][0]['value']['#attributes']['class'][] = 'utm_website';
