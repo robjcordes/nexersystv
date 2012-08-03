@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://www.nexersystv.localhost:8888" />
+<title>create apple campaign</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">create apple campaign</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>node/add/campaign</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-title</td>
+	<td>Apple</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-src-und-0-value</td>
+	<td>http://www.principlepoint.com/client/nexersys/forward1.html</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-thank-url-und-0-value</td>
+	<td>nexersys.com/thank-you</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=edit-field-camp-type-und</td>
+	<td>label=Home</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-phone-und-0-value</td>
+	<td>555-555-5555</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-offer-txt-und-0-value</td>
+	<td>Love Apples</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-media-und-0-value</td>
+	<td>Banner</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-term-und-0-value</td>
+	<td>Apple</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-img-1-und-0-upload</td>
+	<td>/Users/jordotech/Desktop/principle/apple.jpeg</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
