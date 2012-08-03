@@ -19,7 +19,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title</td>
-	<td>Commercial Lead Form</td>
+	<td>Commercial Campaign - banana promo</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -55,6 +55,21 @@
 	<td>type</td>
 	<td>id=edit-field-camp-term-und-0-value</td>
 	<td>test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-term-und-0-value</td>
+	<td>Banana</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-camp-img-1-und-0-upload</td>
+	<td>/Users/jordotech/Desktop/principle/promo-commercial.png</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=edit-field-campaign-promo-main-und</td>
+	<td>label=Banana promo</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>

@@ -1,7 +1,21 @@
 <?php
 function camp_landing_install() {
+    global $base_url;
     $t = get_t();
-
+    
+    //create a vocabulary for campaign types
+    
+    $edit = array(
+      'name' => t('Campaign Types'), 
+      'machine_name' => 'campaign_types', 
+      'description' => t('Types of campaigns.'), 
+      'hierarchy' => 1, 
+      'module' => 'camp_landing', 
+      'weight' => -10,
+    );
+    
+    $vocabulary = (object) $edit;
+    taxonomy_vocabulary_save($vocabulary);
     $node_campaign = array(
         'type' => 'campaign',
         'name' => $t('Campaign'),
@@ -9,7 +23,9 @@ function camp_landing_install() {
         'description' => $t('An individual campaign created by nexersys staff for unique landing forms.'),
         'has_body' => FALSE,
         'has_title' => TRUE,
-    );  
+        'title_label' => 'Campaign Name',
+
+    );
     $content_type = node_type_set_defaults($node_campaign);
     node_type_save($content_type);
     $node_campaign_promo = array(
@@ -19,72 +35,172 @@ function camp_landing_install() {
         'description' => $t('A node containing promo media for a campaign.'),
         'has_body' => FALSE,
         'has_title' => TRUE,
-        'title_label' => 'Campaign Name',
-    );  
+    );
     $content_type = node_type_set_defaults($node_campaign_promo);
     node_type_save($content_type);
-    
+
     $fields = array(
-        array(    
-            'field_name' => 'field_camp_website', 
-            'type' => 'text',
-        ),
-        array(    
-            'field_name' => 'field_camp_src', 
+        array(
+            'field_name' => 'field_camp_website',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_camp_type', 
-            'type' => 'list_text', 
+            'field_name' => 'field_camp_src',
+            'type' => 'text',
+        ),
+        array(
+            'field_name' => 'field_camp_type',
+            'type' => 'list_text',
             'settings' => array(
                 'allowed_values_function' => '_camp_types',
             ),
         ),
         array(
-            'field_name' => 'field_camp_phone', 
+            'field_name' => 'field_camp_phone',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_camp_thank_url', 
+            'field_name' => 'field_camp_thank_url',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_camp_offer_txt', 
+            'field_name' => 'field_camp_offer_txt',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_camp_media', 
+            'field_name' => 'field_camp_media',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_camp_term', 
+            'field_name' => 'field_camp_term',
             'type' => 'text',
         ),
         array(
-            'field_name' => 'field_gen_url', 
+            'field_name' => 'field_gen_url',
             'type' => 'text',
         ),
+        
         array(
             'field_name' => 'field_camp_img_1',
             'type' => 'image',
         ),
-        //todo: create entity_reference field for campaigns that reference the campaign_promo nids
+         
         array(
-            'field_name' => 'field_camppromo_img_1',  
+            'field_name' => 'field_camppromo_img_1',
             'type' => 'image',
         ),
-    
+
+        array (
+            'translatable' => '0',
+            'entity_types' =>
+            array (
+            ),
+            'settings' =>
+            array (
+                'target_type' => 'node',
+                'handler' => 'base',
+                'handler_submit' => 'Change handler',
+                'handler_settings' =>
+                array (
+                    'target_bundles' =>
+                    array (
+                        'campaign_promo' => 'campaign_promo',
+                    ),
+                    'sort' =>
+                    array (
+                        'type' => 'none',
+                        'property' => 'nid',
+                        'field' => 'body:value',
+                        'direction' => 'ASC',
+                    ),
+                ),
+            ),
+            'storage' =>
+            array (
+                'type' => 'field_sql_storage',
+                'settings' =>
+                array (
+                ),
+                'module' => 'field_sql_storage',
+                'active' => '1',
+                'details' =>
+                array (
+                    'sql' =>
+                    array (
+                        'FIELD_LOAD_CURRENT' =>
+                        array (
+                            'field_data_field_campaign_promo_main' =>
+                            array (
+                                'target_id' => 'field_campaign_promo_main_target_id',
+                            ),
+                        ),
+                        'FIELD_LOAD_REVISION' =>
+                        array (
+                            'field_revision_field_campaign_promo_main' =>
+                            array (
+                                'target_id' => 'field_campaign_promo_main_target_id',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'foreign keys' =>
+            array (
+                'node' =>
+                array (
+                    'table' => 'node',
+                    'columns' =>
+                    array (
+                        'target_id' => 'nid',
+                    ),
+                ),
+            ),
+            'indexes' =>
+            array (
+                'target_id' =>
+                array (
+                    0 => 'target_id',
+                ),
+            ),
+            //'id' => '407',
+            'field_name' => 'field_campaign_promo_main',
+            'type' => 'entityreference',
+            'module' => 'entityreference',
+            'active' => '1',
+            'locked' => '0',
+            'cardinality' => '1',
+            'deleted' => '0',
+            'columns' =>
+            array (
+                'target_id' =>
+                array (
+                    'description' => 'The id of the target entity.',
+                    'type' => 'int',
+                    'unsigned' => true,
+                    'not null' => true,
+                ),
+            ),
+            'bundles' =>
+            array (
+                'node' =>
+                array (
+                    0 => 'campaign',
+                ),
+            ),
+        ),
+
+
     );
     foreach($fields as $key=>$value){
         field_create_field($value);
     }
     $instances = array(
 
-                array(
-            'field_name' => 'field_camp_website', 
-            'entity_type' => 'node', 
-            'label' => 'Website URL', 
-            'bundle' => 'campaign', 
+        array(
+            'field_name' => 'field_camp_website',
+            'entity_type' => 'node',
+            'label' => 'Website URL',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'type' => 'textfield',
@@ -102,10 +218,10 @@ function camp_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_src', 
-            'entity_type' => 'node', 
-            'label' => 'Campaign Source', 
-            'bundle' => 'campaign', 
+            'field_name' => 'field_camp_src',
+            'entity_type' => 'node',
+            'label' => 'Campaign Source',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'type' => 'textfield',
@@ -123,10 +239,10 @@ function camp_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_thank_url', 
-            'entity_type' => 'node', 
-            'label' => 'Campaign Thank You Page URL', 
-            'bundle' => 'campaign', 
+            'field_name' => 'field_camp_thank_url',
+            'entity_type' => 'node',
+            'label' => 'Campaign Thank You Page URL',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'type' => 'textfield',
@@ -144,17 +260,17 @@ function camp_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_type', 
-            'entity_type' => 'node', 
-            'label' => 'Campaign Type', 
-            'bundle' => 'campaign', 
+            'field_name' => 'field_camp_type',
+            'entity_type' => 'node',
+            'label' => 'Campaign Type',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'active' => 1,
                 'module' => 'options',
                 'type' => 'options_select',
                 'settings' => array(),
-            ),   
+            ),
             'display' => array(
                 'default' => array(
                     'label' => 'hidden',
@@ -169,13 +285,13 @@ function camp_landing_install() {
         ),
         array(
             'field_name' => 'field_camp_phone',
-            'entity_type' => 'node', 
-            'label' => 'Campaign Phone Number', 
-            'bundle' => 'campaign', 
+            'entity_type' => 'node',
+            'label' => 'Campaign Phone Number',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'type' => 'textfield',
-            ),  
+            ),
             'display' => array(
                 'default' => array(
                     'label' => 'hidden',
@@ -191,58 +307,14 @@ function camp_landing_install() {
         array(
             'field_name' => 'field_camp_offer_txt',
             'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Campaign Offer Text', 
-            'bundle' => 'campaign', 
+            'entity_type' => 'node',
+            'label' => 'Campaign Offer Text',
+            'bundle' => 'campaign',
             'required' => TRUE,
             'widget' => array(
                 'type' => 'textfield',
-            ),  
-                    'display' => array(
-                'default' => array(
-                    'label' => 'hidden',
-                    'type' => 'hidden',
-                ),
-                'teaser' => array(
-                    'label' => 'hidden',
-                    'settings' => array(),
-                    'type' => 'hidden',
-                ),
             ),
-        ),
-                array(
-            'field_name' => 'field_camp_media',
-            'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Campaign Media', 
-            'bundle' => 'campaign', 
-            'required' => TRUE,
-            'widget' => array(
-                'type' => 'textfield',
-            ),  
-                    'display' => array(
-                'default' => array(
-                    'label' => 'hidden',
-                    'type' => 'hidden',
-                ),
-                'teaser' => array(
-                    'label' => 'hidden',
-                    'settings' => array(),
-                    'type' => 'hidden',
-                ),
-            ),
-        ),
-                array(
-            'field_name' => 'field_camp_term', 
-            'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Campaign Term', 
-            'bundle' => 'campaign', 
-            'required' => TRUE,
-            'widget' => array(
-                'type' => 'textfield',
-            ),  
-                    'display' => array(
+            'display' => array(
                 'default' => array(
                     'label' => 'hidden',
                     'type' => 'hidden',
@@ -255,17 +327,61 @@ function camp_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_gen_url', 
+            'field_name' => 'field_camp_media',
             'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Generated URL', 
-            'bundle' => 'campaign', 
+            'entity_type' => 'node',
+            'label' => 'Campaign Media',
+            'bundle' => 'campaign',
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                ),
+                'teaser' => array(
+                    'label' => 'hidden',
+                    'settings' => array(),
+                    'type' => 'hidden',
+                ),
+            ),
+        ),
+        array(
+            'field_name' => 'field_camp_term',
+            'locked' => TRUE,
+            'entity_type' => 'node',
+            'label' => 'Campaign Term',
+            'bundle' => 'campaign',
+            'required' => TRUE,
+            'widget' => array(
+                'type' => 'textfield',
+            ),
+            'display' => array(
+                'default' => array(
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                ),
+                'teaser' => array(
+                    'label' => 'hidden',
+                    'settings' => array(),
+                    'type' => 'hidden',
+                ),
+            ),
+        ),
+        array(
+            'field_name' => 'field_gen_url',
+            'locked' => TRUE,
+            'entity_type' => 'node',
+            'label' => 'Generated URL',
+            'bundle' => 'campaign',
             'required' => FALSE,
             'widget' => array(
                 'type' => 'textfield',
                 'settings' => array('size' => 100),
-            ),  
-                    'display' => array(
+            ),
+            'display' => array(
                 'default' => array(
                     'label' => 'hidden',
                     'type' => 'hidden',
@@ -278,17 +394,17 @@ function camp_landing_install() {
             ),
         ),
         array(
-            'field_name' => 'field_camp_img_1', 
+            'field_name' => 'field_camp_img_1',
             'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Campaign Image', 
-            'bundle' => 'campaign', 
+            'entity_type' => 'node',
+            'label' => 'Campaign Image',
+            'bundle' => 'campaign',
             'required' => FALSE,
             'widget' => array(
                 'type' => 'image_image',
                 'settings' => array(),
-            ),  
-                    'display' => array(
+            ),
+            'display' => array(
                 'default' => array(
                     'label' => 'hidden',
                     'type' => 'hidden',
@@ -300,55 +416,98 @@ function camp_landing_install() {
                 ),
             ),
         ),
-                array(
-            'field_name' => 'field_camppromo_img_1', 
+        
+        array(
+            'field_name' => 'field_camppromo_img_1',
             'locked' => TRUE,
-            'entity_type' => 'node', 
-            'label' => 'Campaign Promo Image', 
-            'bundle' => 'campaign_promo', 
+            'entity_type' => 'node',
+            'label' => 'Campaign Promo Image',
+            'bundle' => 'campaign_promo',
             'required' => FALSE,
             'widget' => array(
                 'type' => 'image_image',
                 'settings' => array(),
-            ),  
-                    /*
-                    'display' => array(
-                'default' => array(
-                    'label' => 'hidden',
-                    'type' => 'hidden',
-                ),
-                'teaser' => array(
-                    'label' => 'hidden',
-                    'settings' => array(),
-                    'type' => 'hidden',
-                ),
-            ),*/
+            ),
+
         ),
-        
+
+        array (
+            'label' => 'Link to Promotion',
+            'widget' =>
+            array (
+                'weight' => '6',
+                'type' => 'options_select',
+                'module' => 'options',
+                'active' => 1,
+                'settings' =>
+                array (
+                ),
+            ),
+            'settings' =>
+            array (
+                'user_register_form' => false,
+            ),
+            'display' =>
+            array (
+                'default' =>
+                array (
+                    'label' => 'hidden',
+                    'type' => 'entityreference_label',
+                    'settings' =>
+                    array (
+                        'link' => false,
+                    ),
+                    'module' => 'entityreference',
+                    'weight' => 10,
+                ),
+                'teaser' =>
+                array (
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                    'settings' =>
+                    array (
+                    ),
+                    'weight' => 0,
+                ),
+            ),
+            'required' => 0,
+            'description' => 'Choose a promtion to link to this campaign.  If there are none, create one ' . l('here', $base_url . '/node/add/campaign-promo', array('attributes' => array('target' => '_blank'))),
+            'default_value' => NULL,
+            'field_name' => 'field_campaign_promo_main',
+            'entity_type' => 'node',
+            'bundle' => 'campaign',
+            'deleted' => '0',
+        ),
     );
     foreach($instances as $key=>$value){
         field_create_instance($value);
     }
-
-
 }
 
 
 function camp_landing_uninstall(){
     field_delete_field('field_camp_website');
     field_delete_field('field_camp_src');
-        field_delete_field('field_camp_type');
-        field_delete_field('field_camp_phone');
-        field_delete_field('field_camp_thank_url');
-        field_delete_field('field_camp_offer_txt');
-        field_delete_field('field_camp_media');
-        field_delete_field('field_camp_term');
-        field_delete_field('field_gen_url');
-        field_delete_field('field_camp_img_1');
-        field_delete_field('camp_default_img');
-        field_delete_field('field_campaign_promo_main');
-        field_delete_field('field_camppromo_img_1');
-        
-
+    field_delete_field('field_camp_type');
+    field_delete_field('field_camp_phone');
+    field_delete_field('field_camp_thank_url');
+    field_delete_field('field_camp_offer_txt');
+    field_delete_field('field_camp_media');
+    field_delete_field('field_camp_term');
+    field_delete_field('field_gen_url');
+    field_delete_field('field_camp_img_1');
+    field_delete_field('camp_default_img');
+    field_delete_field('field_campaign_promo_main');
+    field_delete_field('field_camppromo_img_1');
+    $vocabs = taxonomy_get_vocabularies();
+    foreach($vocabs as $key=>$value){
+        debug($value);
+        if($value->machine_name == 'campaign_types'){
+            $vid = $value->vid;
+        }
+    }
+    if(is_numeric($vid)){
+        taxonomy_vocabulary_delete($vid);
+    }
 }
 ?>

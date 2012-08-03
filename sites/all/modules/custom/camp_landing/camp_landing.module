@@ -208,7 +208,9 @@ function theme_camp_landing_view($variables){
 function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
-        //debug($form);
+        //debug($form['field_campaign_promo_main']);
+        debug(field_info_field('field_camp_type'));
+        //debug(field_info_instance('node', 'field_campaign_promo_main', 'campaign'));
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
         //$form['field_camp_website']['und'][0]['value']['#parents'] = array('email');
         $form['field_camp_website']['und'][0]['value']['#attributes']['class'][] = 'utm_website';
