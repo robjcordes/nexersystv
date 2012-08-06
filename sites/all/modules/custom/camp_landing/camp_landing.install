@@ -1,20 +1,22 @@
 <?php
 function camp_landing_install() {
     $t = get_t();
-    
+
     //create a vocabulary for campaign types
-    
+
     $edit = array(
-      'name' => t('Campaign Types'), 
-      'machine_name' => 'campaign_types', 
-      'description' => t('Types of campaigns.'), 
-      'hierarchy' => 1, 
-      'module' => 'camp_landing', 
-      'weight' => -10,
+        'name' => t('Campaign Types'),
+        'machine_name' => 'campaign_types',
+        'description' => t('Types of campaigns.'),
+        'hierarchy' => 1,
+        'module' => 'camp_landing',
+        'weight' => -10,
     );
-    
+
     $vocabulary = (object) $edit;
     taxonomy_vocabulary_save($vocabulary);
+
+    //Create content type campaign
     $node_campaign = array(
         'type' => 'campaign',
         'name' => $t('Campaign'),
@@ -27,6 +29,8 @@ function camp_landing_install() {
     );
     $content_type = node_type_set_defaults($node_campaign);
     node_type_save($content_type);
+
+    //Create content type campaign promo
     $node_campaign_promo = array(
         'type' => 'campaign_promo',
         'name' => $t('Campaign Promo'),
@@ -38,6 +42,20 @@ function camp_landing_install() {
     $content_type = node_type_set_defaults($node_campaign_promo);
     node_type_save($content_type);
 
+    //Create content type campaign offer
+    $node_campaign_offer = array(
+        'type' => 'campaign_offer',
+        'name' => $t('Campaign Offer'),
+        'base' => 'node_content',
+        'description' => $t('A node containing offer content that can be linked to a campaign & promotion.'),
+        'has_body' => TRUE,
+        'has_title' => TRUE,
+    );
+    $content_type = node_type_set_defaults($node_campaign_offer);
+    node_add_body_field($content_type, $label = 'Body');
+    node_type_save($content_type);
+
+    //Start defining fields
     $fields = array(
         array(
             'field_name' => 'field_camp_website',
@@ -47,104 +65,104 @@ function camp_landing_install() {
             'field_name' => 'field_camp_src',
             'type' => 'text',
         ),
-array (
-  'translatable' => '0',
-  'entity_types' => 
-  array (
-  ),
-  'settings' => 
-  array (
-    'target_type' => 'taxonomy_term',
-    'handler' => 'base',
-    'handler_submit' => 'Change handler',
-    'handler_settings' => 
-    array (
-      'target_bundles' => 
-      array (
-        'campaign_types' => 'campaign_types',
-      ),
-      'sort' => 
-      array (
-        'type' => 'none',
-        'property' => 'tid',
-        'field' => 'none',
-        'direction' => 'ASC',
-      ),
-    ),
-  ),
-  'storage' => 
-  array (
-    'type' => 'field_sql_storage',
-    'settings' => 
-    array (
-    ),
-    'module' => 'field_sql_storage',
-    'active' => '1',
-    'details' => 
-    array (
-      'sql' => 
-      array (
-        'FIELD_LOAD_CURRENT' => 
         array (
-          'field_data_field_camp_type' => 
-          array (
-            'target_id' => 'field_camp_type_target_id',
-          ),
+            'translatable' => '0',
+            'entity_types' =>
+            array (
+            ),
+            'settings' =>
+            array (
+                'target_type' => 'taxonomy_term',
+                'handler' => 'base',
+                'handler_submit' => 'Change handler',
+                'handler_settings' =>
+                array (
+                    'target_bundles' =>
+                    array (
+                        'campaign_types' => 'campaign_types',
+                    ),
+                    'sort' =>
+                    array (
+                        'type' => 'none',
+                        'property' => 'tid',
+                        'field' => 'none',
+                        'direction' => 'ASC',
+                    ),
+                ),
+            ),
+            'storage' =>
+            array (
+                'type' => 'field_sql_storage',
+                'settings' =>
+                array (
+                ),
+                'module' => 'field_sql_storage',
+                'active' => '1',
+                'details' =>
+                array (
+                    'sql' =>
+                    array (
+                        'FIELD_LOAD_CURRENT' =>
+                        array (
+                            'field_data_field_camp_type' =>
+                            array (
+                                'target_id' => 'field_camp_type_target_id',
+                            ),
+                        ),
+                        'FIELD_LOAD_REVISION' =>
+                        array (
+                            'field_revision_field_camp_type' =>
+                            array (
+                                'target_id' => 'field_camp_type_target_id',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'foreign keys' =>
+            array (
+                'node' =>
+                array (
+                    'table' => 'node',
+                    'columns' =>
+                    array (
+                        'target_id' => 'nid',
+                    ),
+                ),
+            ),
+            'indexes' =>
+            array (
+                'target_id' =>
+                array (
+                    0 => 'target_id',
+                ),
+            ),
+            //'id' => '580',
+            'field_name' => 'field_camp_type',
+            'type' => 'entityreference',
+            'module' => 'entityreference',
+            'active' => '1',
+            'locked' => '0',
+            'cardinality' => '1',
+            'deleted' => '0',
+            'columns' =>
+            array (
+                'target_id' =>
+                array (
+                    'description' => 'The id of the target entity.',
+                    'type' => 'int',
+                    'unsigned' => true,
+                    'not null' => true,
+                ),
+            ),
+            'bundles' =>
+            array (
+                'node' =>
+                array (
+                    0 => 'campaign',
+                ),
+            ),
         ),
-        'FIELD_LOAD_REVISION' => 
-        array (
-          'field_revision_field_camp_type' => 
-          array (
-            'target_id' => 'field_camp_type_target_id',
-          ),
-        ),
-      ),
-    ),
-  ),
-  'foreign keys' => 
-  array (
-    'node' => 
-    array (
-      'table' => 'node',
-      'columns' => 
-      array (
-        'target_id' => 'nid',
-      ),
-    ),
-  ),
-  'indexes' => 
-  array (
-    'target_id' => 
-    array (
-      0 => 'target_id',
-    ),
-  ),
-  //'id' => '580',
-  'field_name' => 'field_camp_type',
-  'type' => 'entityreference',
-  'module' => 'entityreference',
-  'active' => '1',
-  'locked' => '0',
-  'cardinality' => '1',
-  'deleted' => '0',
-  'columns' => 
-  array (
-    'target_id' => 
-    array (
-      'description' => 'The id of the target entity.',
-      'type' => 'int',
-      'unsigned' => true,
-      'not null' => true,
-    ),
-  ),
-  'bundles' => 
-  array (
-    'node' => 
-    array (
-      0 => 'campaign',
-    ),
-  ),
-),
         array(
             'field_name' => 'field_camp_phone',
             'type' => 'text',
@@ -169,17 +187,20 @@ array (
             'field_name' => 'field_gen_url',
             'type' => 'text',
         ),
-        
+
         array(
             'field_name' => 'field_camp_img_1',
             'type' => 'image',
         ),
-         
+
         array(
             'field_name' => 'field_camppromo_img_1',
             'type' => 'image',
         ),
-
+        array(
+            'field_name' => 'field_campoffer_img_1',
+            'type' => 'image',
+        ),
         array (
             'translatable' => '0',
             'entity_types' =>
@@ -278,9 +299,110 @@ array (
                 ),
             ),
         ),
-
+array (
+  'translatable' => '0',
+  'entity_types' => 
+  array (
+  ),
+  'settings' => 
+  array (
+    'target_type' => 'node',
+    'handler' => 'base',
+    'handler_submit' => 'Change handler',
+    'handler_settings' => 
+    array (
+      'target_bundles' => 
+      array (
+        'campaign_offer' => 'campaign_offer',
+      ),
+      'sort' => 
+      array (
+        'type' => 'none',
+        'property' => 'nid',
+        'field' => 'body:value',
+        'direction' => 'ASC',
+      ),
+    ),
+  ),
+  'storage' => 
+  array (
+    'type' => 'field_sql_storage',
+    'settings' => 
+    array (
+    ),
+    'module' => 'field_sql_storage',
+    'active' => '1',
+    'details' => 
+    array (
+      'sql' => 
+      array (
+        'FIELD_LOAD_CURRENT' => 
+        array (
+          'field_data_field_offer_link' => 
+          array (
+            'target_id' => 'field_offer_link_target_id',
+          ),
+        ),
+        'FIELD_LOAD_REVISION' => 
+        array (
+          'field_revision_field_offer_link' => 
+          array (
+            'target_id' => 'field_offer_link_target_id',
+          ),
+        ),
+      ),
+    ),
+  ),
+  'foreign keys' => 
+  array (
+    'node' => 
+    array (
+      'table' => 'node',
+      'columns' => 
+      array (
+        'target_id' => 'nid',
+      ),
+    ),
+  ),
+  'indexes' => 
+  array (
+    'target_id' => 
+    array (
+      0 => 'target_id',
+    ),
+  ),
+  //'id' => '714',
+  'field_name' => 'field_offer_link',
+  'type' => 'entityreference',
+  'module' => 'entityreference',
+  'active' => '1',
+  'locked' => '0',
+  'cardinality' => '1',
+  'deleted' => '0',
+  'columns' => 
+  array (
+    'target_id' => 
+    array (
+      'description' => 'The id of the target entity.',
+      'type' => 'int',
+      'unsigned' => true,
+      'not null' => true,
+    ),
+  ),
+  'bundles' => 
+  array (
+    'node' => 
+    array (
+      0 => 'campaign',
+    ),
+  ),
+),
 
     );
+    
+    
+            
+            
     foreach($fields as $key=>$value){
         field_create_field($value);
     }
@@ -349,55 +471,55 @@ array (
                 ),
             ),
         ),
-array (
-  'label' => 'Campaign Type',
-  'widget' => 
-  array (
-    'weight' => '7',
-    'type' => 'options_select',
-    'module' => 'options',
-    'active' => 1,
-    'settings' => 
-    array (
-    ),
-  ),
-  'settings' => 
-  array (
-    'user_register_form' => false,
-  ),
-  'display' => 
-  array (
-    'default' => 
-    array (
-      'label' => 'above',
-      'type' => 'entityreference_label',
-      'settings' => 
-      array (
-        'link' => false,
-      ),
-      'module' => 'entityreference',
-      'weight' => 11,
-    ),
-    'teaser' => 
-    array (
-      'type' => 'hidden',
-      'label' => 'above',
-      'settings' => 
-      array (
-      ),
-      'weight' => 0,
-    ),
-  ),
-  'required' => 0,
-  'description' => 'Choose a campaign type.  If there are none, create some ' . l('here', './admin/structure/taxonomy/campaign_types/add', array('attributes' => array('target'=>'_blank'))),
-  'default_value' => NULL,
-  //'id' => '447',
-  //'field_id' => '580',
-  'field_name' => 'field_camp_type',
-  'entity_type' => 'node',
-  'bundle' => 'campaign',
-  'deleted' => '0',
-),
+        array (
+            'label' => 'Campaign Type',
+            'widget' =>
+            array (
+                'weight' => '7',
+                'type' => 'options_select',
+                'module' => 'options',
+                'active' => 1,
+                'settings' =>
+                array (
+                ),
+            ),
+            'settings' =>
+            array (
+                'user_register_form' => false,
+            ),
+            'display' =>
+            array (
+                'default' =>
+                array (
+                    'label' => 'above',
+                    'type' => 'entityreference_label',
+                    'settings' =>
+                    array (
+                        'link' => false,
+                    ),
+                    'module' => 'entityreference',
+                    'weight' => 11,
+                ),
+                'teaser' =>
+                array (
+                    'type' => 'hidden',
+                    'label' => 'above',
+                    'settings' =>
+                    array (
+                    ),
+                    'weight' => 0,
+                ),
+            ),
+            'required' => 0,
+            'description' => 'Choose a campaign type.  If there are none, create some ' . l('here', './admin/structure/taxonomy/campaign_types/add', array('attributes' => array('target'=>'_blank'))),
+            'default_value' => NULL,
+            //'id' => '447',
+            //'field_id' => '580',
+            'field_name' => 'field_camp_type',
+            'entity_type' => 'node',
+            'bundle' => 'campaign',
+            'deleted' => '0',
+        ),
         array(
             'field_name' => 'field_camp_phone',
             'entity_type' => 'node',
@@ -531,7 +653,7 @@ array (
                 ),
             ),
         ),
-        
+
         array(
             'field_name' => 'field_camppromo_img_1',
             'locked' => TRUE,
@@ -543,9 +665,35 @@ array (
                 'type' => 'image_image',
                 'settings' => array(),
             ),
-
         ),
-
+        
+        array(
+            'field_name' => 'field_campoffer_img_1',
+            'locked' => TRUE,
+            'entity_type' => 'node',
+            'label' => 'Campaign Offer Image',
+            'bundle' => 'campaign_offer',
+            'required' => FALSE,
+            'widget' => array(
+                'type' => 'image_image',
+                'settings' => array(),
+            ),
+            'display' =>
+            array (
+                'default' =>
+                array (
+                    'label' => 'hidden',
+                    'type' => 'hidden',
+                    'teaser' =>
+                array (
+                    'type' => 'hidden',
+                    'label' => 'hidden',
+                    'weight' => 0,
+                ),
+            ),
+                ),
+        ),
+        
         array (
             'label' => 'Promotion Link',
             'widget' =>
@@ -593,7 +741,57 @@ array (
             'bundle' => 'campaign',
             'deleted' => '0',
         ),
+            array (
+  'label' => 'Offer Link',
+  'widget' => 
+  array (
+    'weight' => '14',
+    'type' => 'options_select',
+    'module' => 'options',
+    'active' => 1,
+    'settings' => 
+    array (
+    ),
+  ),
+  'settings' => 
+  array (
+    'user_register_form' => false,
+  ),
+  'display' => 
+  array (
+    'default' => 
+    array (
+      'label' => 'above',
+      'type' => 'entityreference_label',
+      'settings' => 
+      array (
+        'link' => false,
+      ),
+      'module' => 'entityreference',
+      'weight' => 18,
+    ),
+    'teaser' => 
+    array (
+      'type' => 'hidden',
+      'label' => 'above',
+      'settings' => 
+      array (
+      ),
+      'weight' => 0,
+    ),
+  ),
+  'required' => 0,
+'description' => 'Choose an offer to link to this campaign.  If there are none, create one ' . l('here', './node/add/campaign-offer', array('attributes' => array('target' => '_blank'))),  'default_value' => NULL,
+  //'id' => '581',
+  //'field_id' => '714',
+  'field_name' => 'field_offer_link',
+  'entity_type' => 'node',
+  'bundle' => 'campaign',
+  'deleted' => '0',
+),
     );
+    
+
     foreach($instances as $key=>$value){
         field_create_instance($value);
     }
@@ -614,6 +812,8 @@ function camp_landing_uninstall(){
     field_delete_field('camp_default_img');
     field_delete_field('field_campaign_promo_main');
     field_delete_field('field_camppromo_img_1');
+    field_delete_field('field_campoffer_img_1');
+    field_delete_field('field_offer_link');
     $vocabs = taxonomy_get_vocabularies();
     foreach($vocabs as $key=>$value){
         if($value->machine_name == 'campaign_types'){

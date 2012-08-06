@@ -153,3 +153,19 @@ margin-top:10px;
 	padding-top: 10px;
 	padding-left: 30px;
 }
+.camp_landing_phone{
+    color: #09375C;
+    font-family: Helvetica,arial,sans-serif;
+    font-weight: bold;
+    position: absolute;
+}
+#zone-branding .camp_landing_phone{
+        font-size:22px;
+    left: 40px;
+    top: 45px;
+}
+#zone-postscript .camp_landing_phone{
+    font-size: 23px;
+    left: 45px;
+    top: 68px;
+}

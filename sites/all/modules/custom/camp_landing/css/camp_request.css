@@ -6,6 +6,9 @@
     float:left;
     position:relative;
 }
+.submitted{
+    display:none;
+}
 #camp_request tbody{
     border:none;
 }

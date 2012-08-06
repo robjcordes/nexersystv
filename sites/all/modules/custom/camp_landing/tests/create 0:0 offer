@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://www.nexersystv.localhost:8888" />
+<title>create 0/0 offer</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">create 0/0 offer</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>node/add/campaign-offer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-title</td>
+	<td>0/0 example offer</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-body-und-0-value</td>
+	<td>&lt;div style=&quot;position:relative;overflow:hidden;width:940px;height:378px;&quot; id=&quot;00bigoffer_hype_container&quot;&gt;<br />&lt;div class=&quot;HYPE_scene&nbsp;&nbsp;&quot; id=&quot;hype-scene-ZkynJMm9O11jNDnq&quot; hype_scene_index=&quot;0&quot; style=&quot;background-color: rgb(255, 255, 255); display: block; overflow: hidden; position: absolute; width: 940px; height: 378px; left: 0px; top: 0px;&quot;&gt;&lt;div class=&quot;HYPE_element_container&quot; style=&quot;position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 2;&quot;&gt;&lt;div class=&quot;HYPE_element&quot; id=&quot;hype-obj-qzVVxwqXRbMEiANm&quot; style=&quot;pointer-events: auto; top: 16px; left: 477px; width: 445px; height: 267px; border-style: solid; background-color: rgb(255, 255, 255); border-width: 1px; border-color: rgb(160, 160, 160); overflow: visible; position: absolute; z-index: 2;&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;HYPE_element_container&quot; style=&quot;position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 3;&quot;&gt;&lt;div class=&quot;HYPE_element&quot; id=&quot;hype-obj-s6GNYD2mhEwNhtHD&quot; style=&quot;pointer-events: auto; top: 25px; left: 482px; width: 421px; height: 239px; padding: 8px; overflow: visible; word-wrap: break-word; display: inline; z-index: 3; position: absolute; font-size: 11px; color: rgb(0, 0, 0); font-weight: normal;&quot;&gt;&lt;div&gt;&lt;b style=&quot;font-size: 12px;&quot;&gt;To take advantage of Nexersys financing follow these simply steps.&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;1. Click on the “Apply for Financing” button below.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;2. You will be taken to a new tab in your browser where you will fill out the application&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;on Helpcard Credit’s secure website.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;3. You should request a credit amount of $3000. The website will then walk you through&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;the form to collect your information. Hit submit once the application is complete.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;4. If a decision is pending or if you receive approval, you will be given a 7-digit&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; reference number &amp;ndash; write it down.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;5. Within 1.5 minutes, you should receive a credit decision. If you do not receive a&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; decision in 1.5 minutes, a link to check the status will be emailed to you.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;6. Your approval status will also be emailed to you.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;7. Once approved, use the 7-digit reference number you wrote down to purchase your&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; Nexersys. Click Buy Now to enter the shopping cart, add your Nexersys, any&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; accessories you would like to purchase and your shipping method.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;8. When you check out, select “Financing” as your method of payment and enter your&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;&amp;nbsp; &amp;nbsp; 7-digit reference number in the blank for “Reference Number”.&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Arial, Helvetica, sans-serif&quot; class=&quot;Apple-style-span&quot;&gt;9. Congratulations, your order is complete!&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;HYPE_element_container&quot; style=&quot;position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; pointer-events: none; z-index: 1;&quot;&gt;&lt;div class=&quot;HYPE_element&quot; id=&quot;hype-obj-q4zTZhSLUsGXMAW6&quot; style=&quot;pointer-events: auto; top: 0px; left: 0px; width: 940px; height: 378px; background-origin: content-box; background-image: url(&amp;quot;http://www.nexersystv.com/00bigoffer_Resources/00offer-large.png&amp;quot;); overflow: visible; background-size: 100% 100%; position: absolute; display: inline; z-index: 1; cursor: pointer;&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=edit-body-und-0-format--2</td>
+	<td>label=Full HTML</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-field-campoffer-img-1-und-0-upload</td>
+	<td>/Users/jordotech/Desktop/principle/00.png</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
