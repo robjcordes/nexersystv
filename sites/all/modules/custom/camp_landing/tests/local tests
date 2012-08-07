@@ -8,11 +8,11 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="create campaign types">create campaign types</a></td></tr>
 <tr><td><a href="create commercial campaign">create commercial campaign</a></td></tr>
 <tr><td><a href="create generic campaign">create generic campaign</a></td></tr>
 <tr><td><a href="create home campaign">create home campaign</a></td></tr>
 <tr><td><a href="create pro campaign">create pro campaign</a></td></tr>
-<tr><td><a href="local tests">create campaign terms</a></td></tr>
 <tr><td><a href="banana campaign">create banana campaign</a></td></tr>
 <tr><td><a href="orange campaign">create orange campaign</a></td></tr>
 <tr><td><a href="create apple campaign">create apple campaign</a></td></tr>
