@@ -73,7 +73,13 @@ function camp_landing_block_info(){
             'cache' => DRUPAL_NO_CACHE,
             );
         }
-
+    $blocks['homepage_main'] = array(
+        'info' => t('Homepage form & promo'),
+        'visibility' => BLOCK_VISIBILITY_LISTED,
+        'pages' => '<front>',
+        'region' => 'content',
+        'cache' => DRUPAL_NO_CACHE,
+        );
     return $blocks;
 }
 
@@ -83,14 +89,20 @@ function camp_landing_block_info(){
 
 function camp_landing_block_view($delta = '') {
     $block = '';
+    if($delta == 'homepage_main'){
+        $campaign = campaign_landing_choose_campaign();
+        $campaign_node = node_load($campaign);
+        debug($campaign);
+        $block['content'] = node_view($campaign_node, 'full');
+    }
     if($delta == 'homepage_camp_img'){
         $campaign = campaign_landing_choose_campaign();
         if($campaign != false){
             $node = node_load($campaign);
             if($node){
-                            $alias = drupal_get_path_alias('node/' . $node->nid);
-            $promo = '<a href="./'.$alias.'">' . theme('image_style', array('path' => $node->field_camp_img_1[$node->language][0]['uri'], 'style_name' => 'medium')) . '</a>';
-            $block['content'] = $promo;
+                $alias = drupal_get_path_alias('node/' . $node->nid);
+                $promo = '<a href="./'.$alias.'">' . theme('image_style', array('path' => $node->field_camp_img_1[$node->language][0]['uri'], 'style_name' => 'medium')) . '</a>';
+                $block['content'] = $promo;
             }
 
         }
@@ -108,12 +120,15 @@ function camp_landing_block_view($delta = '') {
         if($campaign != false){
             $campaign_node = node_load($campaign);
             if($campaign_node){
-                            $offer_nid = $campaign_node->field_offer_link['und'][0]['target_id'];
+                if(!empty($campaign_node->field_offer_link)){
+                                $offer_nid = $campaign_node->field_offer_link['und'][0]['target_id'];
             $offer_node = node_load($offer_nid);
             $offer_img_uri = $offer_node->field_campoffer_img_1['und'][0]['uri'];
             $alias = drupal_get_path_alias('node/' . $offer_node->nid);
             $offer = '<a href="./'.$alias.'">' . theme('image_style', array('path' => $offer_img_uri, 'style_name' => 'medium')) . '</a>';
             $block['content'] = $offer;
+                }
+
             }
 
         }
@@ -172,9 +187,22 @@ function _camp_types(){
  */
 
 function camp_landing_init(){
+    campaign_landing_choose_campaign();
+    //debug('referrer: ' . $_SERVER['HTTP_REFERER']);
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');
     drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_landing.js');
+}
+
+function create_campaign_cookie(){
+    
+}
+
+function get_campaign_phone($campaign){
+            $query = db_select('field_data_field_camp_phone', 'phone');
+            $query->fields('phone', array('field_camp_phone_value'));
+            $query->condition('entity_id', $campaign);
+            return $query->execute()->fetch()->field_camp_phone_value;
 }
 
 /*
@@ -188,6 +216,15 @@ function campaign_landing_choose_campaign(){
         $nexersystv_cookie = json_decode($_COOKIE['nexersystv_campaign']);
         //debug($nexersystv_cookie);
         $campaign = $nexersystv_cookie->campaign_nid;
+    }elseif(!empty($_GET['nexid'])){
+        if(is_numeric($_GET['nexid'])){
+            $campaign = $_GET['nexid'];
+        }else{
+            $campaign = variable_get('camp_default');
+        }
+        $campaign_phone = get_campaign_phone($campaign);
+        $campaign_array = array('campaign_nid' => $campaign, 'campaign_phone' => $campaign_phone);
+        setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
     }else{
         $source_match = false;
         $campaign = variable_get('camp_default');
@@ -209,10 +246,7 @@ function campaign_landing_choose_campaign(){
             }
         }
         if($campaign){
-            $query = db_select('field_data_field_camp_phone', 'phone');
-            $query->fields('phone', array('field_camp_phone_value'));
-            $query->condition('entity_id', $campaign);
-            $campaign_phone = $query->execute()->fetch()->field_camp_phone_value;
+            $campaign_phone = get_campaign_phone($campaign);
         }
         $campaign_array = array('campaign_nid' => $campaign, 'campaign_phone' => $campaign_phone);
         setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
