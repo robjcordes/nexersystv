@@ -92,8 +92,12 @@ function camp_landing_block_view($delta = '') {
     if($delta == 'homepage_main'){
         $campaign = campaign_landing_choose_campaign();
         $campaign_node = node_load($campaign);
-        debug($campaign);
-        $block['content'] = node_view($campaign_node, 'full');
+        $promo_nid = $campaign_node->field_campaign_promo_main['und'][0]['target_id'];
+        $promo_node_view = node_view(node_load($promo_nid), 'full');
+        $campaign_node_view = node_view($campaign_node, 'full');
+                $block['content'][] = $promo_node_view;
+        $block['content'][] = $campaign_node_view;
+
     }
     if($delta == 'homepage_camp_img'){
         $campaign = campaign_landing_choose_campaign();
