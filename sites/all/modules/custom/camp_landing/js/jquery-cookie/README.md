@@ -28,13 +28,25 @@ Read cookie:
     $.cookie('the_cookie', { raw: true }); // => "the_value" not URL decoded
     $.cookie('not_existing'); // => null
 
-Delete cookie by passing null as value:
+Delete cookie:
 
-    $.cookie('the_cookie', null);
+    // returns false => No cookie found
+    // returns true  => A cookie was found
+    $.removeCookie('the_cookie'[, options]);
 
 *Note: when deleting a cookie, you must pass the exact same path, domain and secure options that were used to set the cookie, unless you're relying on the default options that is.*
 
-## Options
+## Configuration
+
+    raw: true
+    
+By default the cookie value is encoded/decoded when creating/reading, using `encodeURIComponent`/`decodeURIComponent`. Turn off by setting `raw: true`. Default: `false`.
+    
+    json: true
+    
+Automatically store JSON objects passed as the cookie value. Assumes `JSON.stringify`and `JSON.parse`.
+
+## Cookie Options
 
 Options can be set globally by setting properties of the `$.cookie.defaults` object or individually for each call to `$.cookie()` by passing a plain object to the options argument. Per-call options override the ones set by `$.cookie.defaults`.
 
@@ -53,12 +65,6 @@ Define the domain where the cookie is valid. Default: domain of page where the c
     secure: true
 
 If true, the cookie transmission requires a secure protocol (https). Default: `false`.
-
-    raw: true
-
-By default the cookie value is encoded/decoded when creating/reading, using `encodeURIComponent`/`decodeURIComponent`. Turn off by setting `raw: true`. Default: `false`.
-
-## Changelog
 
 ## Development
 

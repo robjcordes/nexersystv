@@ -95,7 +95,7 @@ function camp_landing_block_view($delta = '') {
         $promo_nid = $campaign_node->field_campaign_promo_main['und'][0]['target_id'];
         $promo_node_view = node_view(node_load($promo_nid), 'full');
         $campaign_node_view = node_view($campaign_node, 'full');
-                $block['content'][] = $promo_node_view;
+        $block['content'][] = $promo_node_view;
         $block['content'][] = $campaign_node_view;
 
     }
@@ -362,8 +362,6 @@ function taxonomy_get_vid_from_machine_name($machine_name){
     return $vid;
 }
 function camp_landing_preprocess_page(&$vars){
-    //$node = node_load(arg(1));
-//debug();
     if((arg(0) == 'node' && arg(1) == 'add' && arg(2) == 'campaign') || (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'edit')){
         drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_gen_url.js');
 

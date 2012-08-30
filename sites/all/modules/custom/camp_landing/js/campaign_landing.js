@@ -3,8 +3,12 @@ $(document).ready(function() {
     if(cookie != ''){
         cookie =     $.parseJSON(cookie);
         phone = cookie['campaign_phone'];
-    }else{
-        
-    }
+
     $('.camp_landing_phone').html(phone);
+    }
+    $('.view-mode-full').append('<a href="#" onclick="camp_landing_delete_cookie();">Delete campaign cookie</a>');
+
 });
+    function camp_landing_delete_cookie(){
+        $.removeCookie('nexersystv_campaign');
+    }
