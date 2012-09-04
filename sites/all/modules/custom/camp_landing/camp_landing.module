@@ -39,6 +39,12 @@ function camp_landing_menu(){
     return $items;
 }
 
+function camp_get_term_from_tid($tid){
+    $query = db_select('taxonomy_term_data', 'ttd');
+    $query->fields('ttd', array('name',));
+    $query->condition('tid', $tid);
+    return $query->execute()->fetch()->name;
+}
 /*
  * Implementation of hook_block_info()
  */
@@ -290,12 +296,14 @@ function camp_landing_node_view($node, $view_mode) {
         $item = menu_get_item();
         $path = $item['href'];
         $path = drupal_get_path_alias($path);
+        $camp_type_tid = $node->field_camp_type['und'][0]['target_id'];
         $vars = array(
             'camp_form_url' => $base_url . '/' . $path,
             'camp_name' => $node->title,
             'camp_src' => $node->field_camp_src[$node->language][0]['value'],
             'camp_thank_url' => $node->field_camp_thank_url[$node->language][0]['value'],
-            'camp_type' => $node->field_camp_type['und'][0]['entity']->name,
+            'camp_type' => camp_get_term_from_tid($camp_type_tid),
+
             'camp_phone' => $node->field_camp_phone[$node->language][0]['value'],
             'camp_offer_txt' => $node->field_camp_offer_txt[$node->language][0]['value'],
             'camp_media' => $node->field_camp_media[$node->language][0]['value'],

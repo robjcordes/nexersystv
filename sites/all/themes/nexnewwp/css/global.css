@@ -713,28 +713,28 @@ margin:0 0 1px;
 	font-style:normal;
 }
 /* footer */
-#footer{
+#section-footer{
 	width:100%;
 	overflow:hidden;
 	display:table-footer-group;
 	font:1em/1.324em 'Univers', Arial, Helvetica, sans-serif;
 	color:#282828;
 }
-* +html #footer{
+* +html #section-footer{
 	position:relative;
 	margin-top:expression(- this.offsetHeight + "px");
 }
-#footer a{
+#section-footer a{
 	color:#282828;
 	text-decoration:none;
 }
-#footer a:hover{text-decoration:underline;}
-#footer .footer-holder {
+#section-footer a:hover{text-decoration:underline;}
+#section-footer .footer-holder {
 	height:1%;
 	display:table-row;
 }
-#footer .footer-frame{display:table-cell;}
-#footer .container_12{
+#section-footer .footer-frame{display:table-cell;}
+#section-footer .container_12{
 	background:#eee;
 	padding:10px 0 15px;
 	margin-bottom:14px;
@@ -858,7 +858,11 @@ margin:0 0 1px;
 padding-top: 1px;
 padding-bottom: 1px;
 }
-
+#region-content{
+    margin-left: auto;
+    margin-right: auto;
+    width: 960px;
+}
 /* Rounds-Gallery */
 /* General styles */
 .content #rounds-gallery, .tab-list #rounds-gallery {
