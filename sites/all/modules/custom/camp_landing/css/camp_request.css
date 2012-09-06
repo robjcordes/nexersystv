@@ -41,7 +41,7 @@
     height:299px;
 }
 #camp_request .left-bottom{
-    background:url('/sites/all/themes/nexersystv/form/img/nex-form-bot-left.png');
+    background:url('../img/nex-form-bot-left.png');
     float:left;
     clear:left;
     height:172px;
@@ -49,14 +49,14 @@
 
 #camp_request .right{
     float:left;
-    background:url('/sites/all/themes/nexersystv/form/img/nex-right-box3.png');
+    background:url('../img/brochure-right-box-new.png');
     height: 471px;
     width:484px;
 	margin-bottom: 10px;
 }
 
 #campaign-landing-form .form-submit{
-    xbackground: url("/sites/all/themes/nexersystv/form/img/request-but-up.png") repeat scroll 0 0 transparent;
+    xbackground: url("../img/request-but-up.png") repeat scroll 0 0 transparent;
     border: medium none;
     bottom: 90px;
     height: 59px;
@@ -66,7 +66,7 @@
     width: 258px;
 }
 #campaign-landing-form .down{
-    background:url('/sites/all/themes/nexersystv/form/img/request-but-down.png');
+    background:url('../img/request-but-down.png');
 }
 #camp_request .hidden{
     display:none;
@@ -102,4 +102,17 @@ width:207px;
 .form-item, .form-actions{
     margin-top:0;
     margin-bottom:0;
+}
+#cant-wait-container{
+    bottom: 18px;
+    color: #FFFFFF;
+    font-size: 18px;
+    line-height: 20px;
+    position: absolute;
+    text-align: center;
+    width: 484px;
+}
+.cant-wait{
+    color:#000;
+    font-size: 20px;
 }

@@ -527,7 +527,7 @@ function campaign_landing_form($form, &$form_state, $vars){
         '#src' => drupal_get_path('module', 'camp_landing') . '/img/request-but-up.png',
         '#suffix' => t('</td></tr>'),
     );
-    $form['#suffix'] = '</table></div></div>';
+    $form['#suffix'] = '</table></div><div id="cant-wait-container"><div class="cant-wait">Can\'t wait another second?</div>Call us toll free at <span class="camp_landing_phone"></span>,<br/>Monday thru Friday 8 to 6pm CST</div></div>';
     return $form;
 }
 function campaign_landing_form_submit($form, &$form_state){
