@@ -348,7 +348,7 @@ function camp_landing_form_alter(&$form, &$form_state, $form_id){
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'utm_term';
 
-        $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a>';
+        $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a><br/>Campaign ID: <span class="nexid">' . arg(1) . '</span>';
         $form['field_gen_url']['und'][0]['value']['#attributes']['class'][] = 'genUrl';
     }
 }

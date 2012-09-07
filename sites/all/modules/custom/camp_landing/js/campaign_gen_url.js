@@ -16,10 +16,11 @@ $(document).ready(function() {
                 urlParams += '&utm_media=' + encodeURIComponent($(this).val());
             }
             if($(this).hasClass('utm_term') && $(this).val() != ''){
-                
                 urlParams += '&utm_term=' + encodeURIComponent($(this).val());
             }
         });
+        var nexid = $('.nexid').html();
+        urlParams += '&nexid=' + nexid;
                     urlParams = urlParams.substr(1);
             genUrl = genUrl + urlParams;
         $('#campaign-node-form .genUrl').val(genUrl);
