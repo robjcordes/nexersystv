@@ -226,7 +226,7 @@ function campaign_landing_choose_campaign(){
     //has nexersystv_campaign cookie set?
     if(isset($_COOKIE['nexersystv_campaign'])){
         $nexersystv_cookie = json_decode($_COOKIE['nexersystv_campaign']);
-        //debug($nexersystv_cookie);
+        debug($nexersystv_cookie);
         $campaign = $nexersystv_cookie->campaign_nid;
     }elseif(!empty($_GET['nexid'])){
         if(is_numeric($_GET['nexid'])){
@@ -260,11 +260,30 @@ function campaign_landing_choose_campaign(){
         if($campaign){
             $campaign_phone = get_campaign_phone($campaign);
         }
-        $campaign_array = array('campaign_nid' => $campaign, 'campaign_phone' => $campaign_phone);
+        
+        
+        $campaign_array = array(
+            'campaign_nid' => $campaign, 
+            'campaign_phone' => $campaign_phone,
+            'campaign_params' => camp_landing_camp_url_params($campaign),
+            );
         setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
     }
    
     return $campaign;
+}
+
+function camp_landing_camp_url_params($campaign_nid){
+    $node = node_load($campaign_nid);
+        //debug($node);
+        $utm_media = '&utm_media=' . urlencode($node->field_camp_media['und'][0]['value']);
+        $utm_src = '&utm_src=' . urlencode($node->field_camp_src['und'][0]['value']);
+        debug($utm_src);
+        $utm_content = '&utm_content=' . urlencode($node->field_camp_offer_txt['und'][0]['value']);
+        $utm_term = '&utm_term=' . urlencode($node->field_camp_term['und'][0]['value']);
+        $nexid = '&nexid=' . $campaign_nid;
+        $params = $utm_media . $utm_src . $utm_content . $utm_term . $nexid;
+        return $params;
 }
 /**
  * Implements hook_theme().

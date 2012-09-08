@@ -6,26 +6,44 @@
 						<div class="footer-container">
 							 
                                                             <div class="links-box">
-                                                                <div class="col"><h4><a href="#">Products</a></h4><div class="menu-products-container"><ul class="" id="menu-products"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-266" id="menu-item-266"><a href="http://nexersys.com/home-fitness-3/">Home Model (NXS-H)</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-69" id="menu-item-69"><a href="http://nexersys.com/pro-fitness/">Pro Model (NXS-P)</a></li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-598" id="menu-item-598"><a href="/commercial-fitness/">Commercial (NXS-C)</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-71" id="menu-item-71"><a href="http://nexersys.com/videos/">Videos</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-73" id="menu-item-73"><a href="http://nexersys.com/accessories/">Accessories</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-861" id="menu-item-861"><a href="http://nexersys.com/buy-now/">Buy Now</a></li>
-</ul></div></div><div class="col"><h4><a href="#">Information</a></h4><div class="menu-information-container"><ul class="" id="menu-information"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75" id="menu-item-75"><a href="http://nexersys.com/faq/">FAQ</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-76" id="menu-item-76"><a href="http://nexersys.com/warranty/">Warranty</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-862" id="menu-item-862"><a href="http://nexersys.com/buy-now/">Our Products</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-78" id="menu-item-78"><a href="http://nexersys.com/compare-nexersys/">Compare Nexersys</a></li>
-</ul></div></div><div class="col"><h4><a href="#">Company</a></h4><div class="menu-company-container"><ul class="" id="menu-company"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79" id="menu-item-79"><a href="http://nexersys.com/fitness-equipment-company/">About Us</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-80" id="menu-item-80"><a href="http://nexersys.com/contact-us/">Contact Us</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-490" id="menu-item-490"><a href="http://nexersys.com/careers/">Careers</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-81" id="menu-item-81"><a href="http://nexersys.com/terms-of-use/">Terms of Use</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-82" id="menu-item-82"><a href="http://nexersys.com/privacy-policy/">Privacy Policy</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83" id="menu-item-83"><a href="http://nexersys.com/financing/">Financing</a></li>
-</ul></div></div><div class="col"><h4><a href="#">Media</a></h4><div class="menu-media-container"><ul class="" id="menu-media"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-180" id="menu-item-180"><a href="http://exercise.nexersys.com/">Our Blog</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-85" id="menu-item-85"><a href="http://nexersys.com/testimonials/">Testimonials</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86" id="menu-item-86"><a href="http://nexersys.com/press-media/">Press &amp; Media</a></li>
-</ul></div></div>	
+                                                                <div class="col"><h4><a href="#">Products</a></h4><div class="menu-products-container">
+<ul class="nexlinks">
+<li><a href="http://nexersys.com/home-fitness-3/">Home Model (NXS-H)</a></li>
+<li><a href="http://nexersys.com/pro-fitness/">Pro Model (NXS-P)</a></li>
+<li><a href="/commercial-fitness/">Commercial (NXS-C)</a></li>
+<li><a href="http://nexersys.com/videos/">Videos</a></li>
+<li><a href="http://nexersys.com/accessories/">Accessories</a></li>
+<li><a href="http://nexersys.com/buy-now/">Buy Now</a></li>
+</ul>
+                                                                    </div></div><div class="col"><h4><a href="#">Information</a></h4><div class="menu-information-container">
+<ul class="nexlinks">
+<li><a href="http://nexersys.com/faq/">FAQ</a></li>
+<li><a href="http://nexersys.com/warranty/">Warranty</a></li>
+<li><a href="http://nexersys.com/buy-now/">Our Products</a></li>
+<li><a href="http://nexersys.com/compare-nexersys/">Compare Nexersys</a></li>
+</ul>
+                                                                        </div></div>
+                                                                <div class="col">
+                                                                    <h4><a href="#">Company</a></h4>
+                                                                    <div class="menu-company-container">
+<ul class="nexlinks">
+
+            <li><a href="http://nexersys.com/fitness-equipment-company/">About Us</a></li>
+<li><a href="http://nexersys.com/contact-us/">Contact Us</a></li>
+<li><a href="http://nexersys.com/careers/">Careers</a></li>
+<li><a href="http://nexersys.com/terms-of-use/">Terms of Use</a></li>
+<li><a href="http://nexersys.com/privacy-policy/">Privacy Policy</a></li>
+<li><a href="http://nexersys.com/financing/">Financing</a></li>
+</ul>
+                                                                    
+                                                                    </div></div><div class="col"><h4><a href="#">Media</a></h4><div class="menu-media-container">
+        <ul class="nexlinks">
+
+            <li><a href="http://exercise.nexersys.com/">Our Blog</a></li>
+<li><a href="http://nexersys.com/testimonials/">Testimonials</a></li>
+<li><a href="http://nexersys.com/press-media/">Press &amp; Media</a></li>
+</ul>
+    </div></div>	
                                                             </div>
                                                         							<!-- item column -->
 							<div class="item-col">
