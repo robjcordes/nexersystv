@@ -9,6 +9,9 @@ $(document).ready(function() {
         $('.panel-box dd').html(phone);
     }
     $('.view-mode-full').append('<a href="#" onclick="camp_landing_delete_cookie();">Delete campaign cookie</a>');
+    var logoLink = $('.logo a').attr('href');
+    adjustedLogoLink = logoLink + '?' + params;
+    $('.logo a').attr('href', adjustedLogoLink);
     $('.section-footer ul.nexlinks ').each(function(){
 
         var test = $(this);
@@ -17,8 +20,8 @@ $(document).ready(function() {
         var footerLink = $(this).children().attr('href');
         adjustedFooterLink = footerLink + '?' + params;
         $(this).children().attr('href', adjustedFooterLink);
-        console.log(footerLink);
-        console.log(params);
+        //console.log(footerLink);
+        //console.log(params);
     });
 
 
