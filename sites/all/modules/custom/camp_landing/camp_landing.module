@@ -1,9 +1,18 @@
 <?php
 //drush dis camp_landing -y; drush pm-uninstall camp_landing -y; drush en camp_landing -y;
 /*
- * todo: admin page to select default campaign in case of no source match
- *
+ * Implementation of hook_init().
  */
+
+function camp_landing_init(){
+    //campaign_landing_choose_campaign();
+    //debug('referrer: ' . $_SERVER['HTTP_REFERER']);
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_landing.js');
+    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery.livequery.js');
+    
+}
 function camp_landing_permission() {
     return array(
         'access camp_landing' => array(
@@ -45,6 +54,7 @@ function camp_get_term_from_tid($tid){
     $query->condition('tid', $tid);
     return $query->execute()->fetch()->name;
 }
+
 /*
  * Implementation of hook_block_info()
  */
@@ -108,7 +118,7 @@ function camp_landing_block_view($delta = '') {
 
     }
     if($delta == 'homepage_camp_img'){
-        $campaign = campaign_landing_choose_campaign();
+        //$campaign = campaign_landing_choose_campaign();
         if($campaign != false){
             $node = node_load($campaign);
             if($node){
@@ -128,7 +138,7 @@ function camp_landing_block_view($delta = '') {
         }
     }
     if($delta == 'homepage_offer_sidebar'){
-        $campaign = campaign_landing_choose_campaign();
+        //$campaign = campaign_landing_choose_campaign();
         if($campaign != false){
             $campaign_node = node_load($campaign);
             if($campaign_node){
@@ -194,18 +204,6 @@ function _camp_types(){
     return $options;
 }
 
-/*
- * Implementation of hook_init().
- */
-
-function camp_landing_init(){
-    campaign_landing_choose_campaign();
-    //debug('referrer: ' . $_SERVER['HTTP_REFERER']);
-    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_src_sniffer.js');
-    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/jquery-cookie/jquery.cookie.js');
-    drupal_add_js(drupal_get_path('module', 'camp_landing') . '/js/campaign_landing.js');
-}
-
 function create_campaign_cookie(){
     
 }
@@ -223,6 +221,7 @@ function get_campaign_phone($campaign){
  */
 
 function campaign_landing_choose_campaign(){
+
     //has nexersystv_campaign cookie set?
     if(isset($_COOKIE['nexersystv_campaign'])){
         $nexersystv_cookie = json_decode($_COOKIE['nexersystv_campaign']);
@@ -260,13 +259,28 @@ function campaign_landing_choose_campaign(){
             $campaign_phone = get_campaign_phone($campaign);
         }
         
-        
+        $campaign_params = camp_landing_camp_url_params($campaign);
         $campaign_array = array(
             'campaign_nid' => $campaign, 
             'campaign_phone' => $campaign_phone,
-            'campaign_params' => camp_landing_camp_url_params($campaign),
+            'campaign_params' => $campaign_params,
+            'landing_time' => time(),
             );
+        
+
+        $uid_stamp = db_insert('camp_landing_uid_stamp')->fields(array('camp_data'=>json_encode($campaign_array),))->execute();
+        $query = db_select('camp_landing_uid_stamp', 'clus')->condition('clus.uid_stamp', $uid_stamp)->fields('clus', array('camp_data'));
+        $result = $query->execute()->fetch()->camp_data;
+        $data = json_decode($result);
+        $data->uid_stamp = $uid_stamp;
+        
+        $data = json_encode($data);
+        db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
+        debug($data);
         setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
+        $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
+        drupal_add_js($jsToWrite, 'inline');
+
     }
    
     return $campaign;
@@ -344,26 +358,16 @@ function theme_camp_landing_view($variables){
 function camp_landing_form_alter(&$form, &$form_state, $form_id){
     global $base_url;
     if($form_id == 'campaign_node_form'){
-        //debug(taxonomy_get_tree(taxonomy_get_vid_from_machine_name('campaign_types')));
-        //debug($form['field_campaign_promo_main']);
-        //debug(field_info_field('field_offer_link'));
-        //debug(field_info_instance('node', 'field_offer_link', 'campaign'));
         $form['field_camp_website']['und'][0]['value']['#default_value'] = $base_url;
-        //$form['field_camp_website']['und'][0]['value']['#parents'] = array('email');
         $form['field_camp_website']['und'][0]['value']['#attributes']['class'][] = 'utm_website';
-
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_src']['und'][0]['value']['#attributes']['class'][] = 'utm_src';
-
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_offer_txt']['und'][0]['value']['#attributes']['class'][] = 'utm_content';
-
         $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_media']['und'][0]['value']['#attributes']['class'][] = 'utm_media';
-
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'urlVar';
         $form['field_camp_term']['und'][0]['value']['#attributes']['class'][] = 'utm_term';
-
         $form['field_gen_url']['und']['#prefix'] .= '<a href="Javascript:void(0);" class="gen_url_link">Generate url</a><br/>Campaign ID: <span class="nexid">' . arg(1) . '</span>';
         $form['field_gen_url']['und'][0]['value']['#attributes']['class'][] = 'genUrl';
     }
@@ -483,9 +487,18 @@ function campaign_landing_form($form, &$form_state, $vars){
             '#prefix' => t('<tr><td class="label">Model Type*</td><td>'),
             '#type' => 'select',
             '#options' => $clean_camp_types,
+            '#default_value' => 'Home',
             '#title' => 'Model Type',
             '#required' => true,
-            '#attributes' => array('class' => array('nexersys validate[required]'),),
+            '#attributes' => array('class' => array('nexersys company_control'),),
+            '#title_display' => 'invisible',
+            '#suffix' => t('</td></tr>'),
+        );
+                $form['company'] = array(
+            '#prefix' => t('<tr class="company_name togglable"><td class="label">Company Name*</td><td>'),
+            '#type' => 'textfield',
+            '#title' => 'Company Name',
+            //'#attributes' => array('class' => 'hidden',),
             '#title_display' => 'invisible',
             '#suffix' => t('</td></tr>'),
         );
