@@ -276,7 +276,6 @@ function campaign_landing_choose_campaign(){
         
         $data = json_encode($data);
         db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
-        debug($data);
         setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
         $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
         drupal_add_js($jsToWrite, 'inline');
