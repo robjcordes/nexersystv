@@ -1,0 +1,225 @@
+diff --git a/plugins/export_ui/services_ctools_export_ui.class.php b/plugins/export_ui/services_ctools_export_ui.class.php
+index 45ddf2f..00b04b2 100644
+--- a/plugins/export_ui/services_ctools_export_ui.class.php
++++ b/plugins/export_ui/services_ctools_export_ui.class.php
+@@ -150,7 +150,7 @@ function services_edit_form_endpoint_server($form, &$form_state) {
+   else {
+     $definition = $server['settings'];
+ 
+-    $settings = isset($endpoint->server_settings[$endpoint->server]) ? $endpoint->server_settings[$endpoint->server] : array();
++    $settings = isset($endpoint->server_settings) ? $endpoint->server_settings : array();
+ 
+     if (!empty($definition['file'])) {
+       call_user_func_array('module_load_include', $definition['file']);
+@@ -189,7 +189,7 @@ function services_edit_form_endpoint_server_submit($form, $form_state) {
+   }
+ 
+   // Store the settings in the endpoint
+-  $endpoint->server_settings[$endpoint->server] = $values;
++  $endpoint->server_settings = $values;
+   services_endpoint_save($endpoint);
+ 
+   drupal_set_message(t('Your server settings have been saved.'));
+diff --git a/servers/rest_server/includes/RESTServer.inc b/servers/rest_server/includes/RESTServer.inc
+index 3caa4f2..3a3b90c 100755
+--- a/servers/rest_server/includes/RESTServer.inc
++++ b/servers/rest_server/includes/RESTServer.inc
+@@ -52,7 +52,7 @@ class RESTServer {
+     $endpoint_definition = services_endpoint_load($endpoint);
+ 
+     // Get the server settings from the endpoint.
+-    $this->settings = !empty($endpoint_definition->server_settings['rest_server']) ? $endpoint_definition->server_settings['rest_server'] : array();
++    $this->settings = !empty($endpoint_definition->server_settings) ? $endpoint_definition->server_settings : array();
+     // Normalize the settings so that we get the expected structure
+     // and sensible defaults.
+     $this->settings = rest_server_setup_settings($this->settings);
+diff --git a/services.install b/services.install
+index b3c912f..a905bbc 100644
+--- a/services.install
++++ b/services.install
+@@ -193,7 +193,7 @@ function services_update_7303() {
+     ->execute()
+     ->fetchAll();
+   // Loop through every endpoint and update the authentication section.
+-  // Note, this will not removw previous authentication settings, it will 
++  // Note, this will not remove previous authentication settings, it will
+   // only add to them.
+   foreach($result as $services_endpoint_object) {
+     $new_authentication = array(
+@@ -215,3 +215,23 @@ function services_update_7399() {
+     db_drop_field($table, 'title');
+   }
+ }
++
++/**
++ * Update 7400 reduces nesting in the way server settings are stored
++ */
++function services_update_7400() {
++  $server_names = array_keys(services_get_servers());
++  foreach (services_endpoint_load_all() as $endpoint) {
++    $settings = $endpoint->server_settings;
++    if (!empty($settings)) {
++      if (in_array(key($settings), $server_names)) {
++        $settings = current($settings);
++      }
++    }
++    else {
++      $settings = array();
++    }
++    $endpoint->server_settings = $settings;
++    services_endpoint_save($endpoint);
++  }
++}
+diff --git a/services.module b/services.module
+index 49802be..a433db3 100644
+--- a/services.module
++++ b/services.module
+@@ -193,7 +193,7 @@ function services_endpoint_callback($endpoint_name) {
+       'endpoint'      => $endpoint_name,
+       'endpoint_path' => $endpoint->path,
+       'debug'         => $endpoint->debug,
+-      'settings'      => $endpoint->server_settings[$server],
++      'settings'      => $endpoint->server_settings,
+     ));
+     if ($endpoint->debug) {
+       watchdog('services', 'Calling server: %server', array('%server' => $server . '_server'), WATCHDOG_DEBUG);
+diff --git a/tests/functional/ServicesParserTests.test b/tests/functional/ServicesParserTests.test
+index d4aeb21..56edb83 100644
+--- a/tests/functional/ServicesParserTests.test
++++ b/tests/functional/ServicesParserTests.test
+@@ -37,18 +37,16 @@ class ServicesParserTests extends ServicesWebTestCase {
+       'services' => 'services',
+     );
+     $endpoint->server_settings = array(
+-      'rest_server' => array(
+-        'formatters' => array(
+-          'php' => TRUE,
+-        ),
+-        'parsers' => array(
+-          'application/x-yaml' => TRUE,
+-          'application/json' => TRUE,
+-          'application/vnd.php.serialized' => TRUE,
+-          'application/plist' => TRUE,
+-          'application/plist+xml' => TRUE,
+-          'application/x-www-form-urlencoded' => FALSE,
+-        ),
++      'formatters' => array(
++        'php' => TRUE,
++      ),
++      'parsers' => array(
++        'application/x-yaml' => TRUE,
++        'application/json' => TRUE,
++        'application/vnd.php.serialized' => TRUE,
++        'application/plist' => TRUE,
++        'application/plist+xml' => TRUE,
++        'application/x-www-form-urlencoded' => FALSE,
+       ),
+     );
+     $endpoint->resources = array(
+@@ -118,4 +116,4 @@ class ServicesParserTests extends ServicesWebTestCase {
+                   && $body->user->name == $account->name;
+     $this->assertTrue($proper_answer, t('User successfully logged in via JSON call.'), 'JSON Call: Login');
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/tests/functional/ServicesXMLRPCTests.test b/tests/functional/ServicesXMLRPCTests.test
+index 081e601..e9ecc4d 100644
+--- a/tests/functional/ServicesXMLRPCTests.test
++++ b/tests/functional/ServicesXMLRPCTests.test
+@@ -87,26 +87,24 @@ class ServicesXMLRPCTestCase extends DrupalWebTestCase {
+       'services' => 'services',
+     );
+     $endpoint->server_settings = array(
+-      'rest_server' => array(
+-        'formatters' => array(
+-          'json' => TRUE,
+-          'bencode' => TRUE,
+-          'rss' => TRUE,
+-          'plist' => TRUE,
+-          'xmlplist' => TRUE,
+-          'php' => TRUE,
+-          'yaml' => TRUE,
+-          'jsonp' => FALSE,
+-          'xml' => FALSE,
+-        ),
+-        'parsers' => array(
+-          'application/x-yaml' => TRUE,
+-          'application/json' => TRUE,
+-          'application/vnd.php.serialized' => TRUE,
+-          'application/plist' => TRUE,
+-          'application/plist+xml' => TRUE,
+-          'application/x-www-form-urlencoded' => TRUE,
+-        ),
++      'formatters' => array(
++        'json' => TRUE,
++        'bencode' => TRUE,
++        'rss' => TRUE,
++        'plist' => TRUE,
++        'xmlplist' => TRUE,
++        'php' => TRUE,
++        'yaml' => TRUE,
++        'jsonp' => FALSE,
++        'xml' => FALSE,
++      ),
++      'parsers' => array(
++        'application/x-yaml' => TRUE,
++        'application/json' => TRUE,
++        'application/vnd.php.serialized' => TRUE,
++        'application/plist' => TRUE,
++        'application/plist+xml' => TRUE,
++        'application/x-www-form-urlencoded' => TRUE,
+       ),
+     );
+     $endpoint->resources = array(
+diff --git a/tests/services.test b/tests/services.test
+index a37d967..acc3825 100644
+--- a/tests/services.test
++++ b/tests/services.test
+@@ -229,27 +229,25 @@ class ServicesWebTestCase extends DrupalWebTestCase {
+       'services' => 'services',
+     );
+     $endpoint->server_settings = array(
+-      'rest_server' => array(
+-        'formatters' => array(
+-          'json' => TRUE,
+-          'bencode' => TRUE,
+-          'rss' => TRUE,
+-          'plist' => TRUE,
+-          'xmlplist' => TRUE,
+-          'php' => TRUE,
+-          'yaml' => TRUE,
+-          'jsonp' => FALSE,
+-          'xml' => FALSE,
+-        ),
+-        'parsers' => array(
+-          'application/x-yaml' => TRUE,
+-          'application/json' => TRUE,
+-          'application/vnd.php.serialized' => TRUE,
+-          'application/plist' => TRUE,
+-          'application/plist+xml' => TRUE,
+-          'application/x-www-form-urlencoded' => TRUE,
+-          'multipart/form-data' => TRUE,
+-        ),
++      'formatters' => array(
++        'json' => TRUE,
++        'bencode' => TRUE,
++        'rss' => TRUE,
++        'plist' => TRUE,
++        'xmlplist' => TRUE,
++        'php' => TRUE,
++        'yaml' => TRUE,
++        'jsonp' => FALSE,
++        'xml' => FALSE,
++      ),
++      'parsers' => array(
++        'application/x-yaml' => TRUE,
++        'application/json' => TRUE,
++        'application/vnd.php.serialized' => TRUE,
++        'application/plist' => TRUE,
++        'application/plist+xml' => TRUE,
++        'application/x-www-form-urlencoded' => TRUE,
++        'multipart/form-data' => TRUE,
+       ),
+     );
+     $endpoint->resources = array(

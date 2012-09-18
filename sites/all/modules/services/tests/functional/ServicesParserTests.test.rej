@@ -1,0 +1,10 @@
+***************
+*** 118,121 ****
+                    && $body->user->name == $account->name;
+      $this->assertTrue($proper_answer, t('User successfully logged in via JSON call.'), 'JSON Call: Login');
+    }
+- }--- 116,119 ----
+                    && $body->user->name == $account->name;
+      $this->assertTrue($proper_answer, t('User successfully logged in via JSON call.'), 'JSON Call: Login');
+    }
++ }

@@ -186,7 +186,7 @@ function services_update_7303() {
     ->execute()
     ->fetchAll();
   // Loop through every endpoint and update the authentication section.
-  // Note, this will not remove previous authentication settings, it will
+  // Note, this will not removw previous authentication settings, it will 
   // only add to them.
   foreach($result as $services_endpoint_object) {
     $new_authentication = array(
