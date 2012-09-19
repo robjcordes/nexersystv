@@ -44,6 +44,7 @@ function camp_landing_menu(){
         'page callback' => 'camp_landing_track',
         'access arguments' => array('access content'),
     );
+    
 
     return $items;
 }
@@ -152,7 +153,6 @@ function camp_landing_block_view($delta = '') {
                 }
 
             }
-
         }
     }
     return $block;
@@ -188,10 +188,6 @@ function camp_landing_settings() {
         return $form;
     }
 }
-function camp_landing_track(){
-    $output = '';
-    return null;
-}
 
 function _camp_types(){
     $vid = taxonomy_get_vid_from_machine_name('campaign_types');
@@ -222,11 +218,15 @@ function get_campaign_phone($campaign){
 
 function campaign_landing_choose_campaign(){
 
-    //has nexersystv_campaign cookie set?
-    if(isset($_COOKIE['nexersystv_campaign'])){
-        $nexersystv_cookie = json_decode($_COOKIE['nexersystv_campaign']);
+    //has nexuid cookie set with campaign?
+    $nexersystv_cookie = isset($_COOKIE['nexuid']) ? json_decode($_COOKIE['nexuid']) : false;
+
+    if(isset($nexersystv_cookie->campaign_nid)){
+        //$nexersystv_cookie = json_decode($_COOKIE['nexuid']);
+        debug('campaign already set');
         $campaign = $nexersystv_cookie->campaign_nid;
     }elseif(!empty($_GET['nexid'])){
+        //todo: chech to make sure this is a valid campaign!
         if(is_numeric($_GET['nexid'])){
             $campaign = $_GET['nexid'];
         }else{
@@ -234,7 +234,7 @@ function campaign_landing_choose_campaign(){
         }
         $campaign_phone = get_campaign_phone($campaign);
         $campaign_array = array('campaign_nid' => $campaign, 'campaign_phone' => $campaign_phone);
-        setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
+        setcookie('nexuid', json_encode($campaign_array), time() + (3600 * 12), '/');
     }else{
         $source_match = false;
         $campaign = variable_get('camp_default');
@@ -260,42 +260,184 @@ function campaign_landing_choose_campaign(){
         }
         
         $campaign_params = camp_landing_camp_url_params($campaign);
+        if(!isset($nexersystv_cookie->uid_stamp)){
+            $uid_stamp = false;
+        }else{
+            $uid_stamp = $nexersystv_cookie->uid_stamp;
+        }
         $campaign_array = array(
             'campaign_nid' => $campaign, 
             'campaign_phone' => $campaign_phone,
             'campaign_params' => $campaign_params,
             'landing_time' => time(),
             );
+        //$campaign_array = null;
+        //problem is here...
+        camp_landing_stamp_visitor($campaign_array, $uid_stamp);
         
+    }
+    return $campaign;
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+
+function camp_landing_services_resources() {
+  return array(
+    'uid_stamp' => array(
+      'retrieve' => array(
+        'callback' => '_camp_landing_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'arg1',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'Test argument 1.',
+          ),
+        ),
+        'access callback' => '_camp_landing_resource_access',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+      ),
+      'actions' => array(
+        'action_retrieve' => array(
+          'access callback' => '_camp_landing_resource_access',
+          'access arguments' => array('view'),
+          'access arguments append' => TRUE,
+          'callback' => '_camp_landing_resource_action_retrieve',
+          'args' => array(
+            array(
+              'name' => 'arg1',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'type' => 'int',
+              'description' => 'Test argument 1.',
+            ),
+          ),
+        ),
+      ),
+      'targeted_actions' => array(
+        'test' => array(
+          'access callback' => '_camp_landing_resource_access',
+          'access arguments' => array('view'),
+          'access arguments append' => TRUE,
+          'callback' => '_camp_landing_resource_targeted_action_test',
+          'args' => array(
+            array(
+              'name' => 'arg1',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'type' => 'int',
+              'description' => 'Test argument 1.',
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * CRUD retrieve callback.
+ */
+
+function _camp_landing_resource_retrieve($arg1) {
+    return camp_landing_track();
+}
+
+/**
+ * Action retrieve callback.
+ */
+
+function _camp_landing_resource_action_retrieve($arg1) {
+  return 'Action retrieve' . $arg1;
+}
+
+/**
+ * Targeted Action test callback.
+ */
+
+function _camp_landing_resource_targeted_action_test($arg1) {
+  return 'Targeted Action test' . $arg1;
+}
+
+/**
+ * Access callback.
+ */
+
+function _camp_landing_resource_access($op) {
+  return TRUE;
+}
+
+function camp_landing_track(){
+    $nexersystv_cookie = isset($_COOKIE['nexuid']) ? json_decode($_COOKIE['nexuid']) : false;
+    if(!$nexersystv_cookie){
+        $uid_stamp = camp_landing_stamp_visitor($campaign_array = NULL, false);
+    }elseif(!is_null($nexersystv_cookie->uid_stamp) && is_null($nexersystv_cookie->campaign_nid)){
+        $uid_stamp = camp_landing_stamp_visitor($campaign_array = NULL, $nexersystv_cookie->uid_stamp);
+    }else{
+        $uid_stamp = $nexersystv_cookie->uid_stamp;
+    }
+    return $uid_stamp;
+}
+
+function camp_landing_stamp_visitor($campaign_array = NULL, $uid_stamp = false){
+    //note: if the campaign_array is null and there is not uid_stamp, this is nexersys.com remotely triggering new uid_stamp + cookies via curl
+    if(!$uid_stamp && is_null($campaign_array)){
+        //new arrival, landed on nexersys.com first.  new stamp.
+        $uid_stamp = db_insert('camp_landing_uid_stamp')->fields(array('camp_data'=>json_encode($campaign_array),))->execute();
+        
+        $campaign_params = null;
+        $campaign_array['uid_stamp'] = $uid_stamp;
+    }elseif(!$uid_stamp && !is_null($campaign_array)){
+        //visitor landed on nexersystv.com first
 
         $uid_stamp = db_insert('camp_landing_uid_stamp')->fields(array('camp_data'=>json_encode($campaign_array),))->execute();
+        //retrieve the row you just inserted and update it to contain the auto increment uid_stamp in the serialized data
         $query = db_select('camp_landing_uid_stamp', 'clus')->condition('clus.uid_stamp', $uid_stamp)->fields('clus', array('camp_data'));
         $result = $query->execute()->fetch()->camp_data;
         $data = json_decode($result);
         $data->uid_stamp = $uid_stamp;
-        
         $data = json_encode($data);
+        //now add the uid_stamp you just created to the $campaign_array and set the cookie so it will have the same info as in the db for this uid_stamp
+        $campaign_array['uid_stamp'] = $uid_stamp;
+        $campaign_params = $campaign_array['campaign_params'];
         db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
-        setcookie('nexersystv_campaign', json_encode($campaign_array), time() + (3600 * 12), '/');
-        $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
-        drupal_add_js($jsToWrite, 'inline');
-
+            $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
+            drupal_add_js($jsToWrite, 'inline');
+    }elseif($uid_stamp && !is_null($campaign_array)){
+        //retrieve the row you just inserted and update it to contain the auto increment uid_stamp in the serialized data
+        $query = db_select('camp_landing_uid_stamp', 'clus')->condition('clus.uid_stamp', $uid_stamp)->fields('clus', array('camp_data'));
+        $result = $query->execute()->fetch()->camp_data;
+        $data = json_decode($result);
+        $data->uid_stamp = $uid_stamp;
+        $data = json_encode($data);
+        //now add the uid_stamp you just created to the $campaign_array and set the cookie so it will have the same info as in the db for this uid_stamp
+        $campaign_array['uid_stamp'] = $uid_stamp;
+        $campaign_params = $campaign_array['campaign_params'];
+        db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
+            $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
+            drupal_add_js($jsToWrite, 'inline');
     }
-   
-    return $campaign;
+
+    setcookie('nexuid', json_encode($campaign_array), time() + (3600 * 12), '/');
+    return $uid_stamp;
 }
 
 function camp_landing_camp_url_params($campaign_nid){
     $node = node_load($campaign_nid);
-        $utm_media = '&utm_media=' . urlencode($node->field_camp_media['und'][0]['value']);
-        $utm_src = '&utm_src=' . urlencode($node->field_camp_src['und'][0]['value']);
-        $utm_content = '&utm_content=' . urlencode($node->field_camp_offer_txt['und'][0]['value']);
-        $utm_term = '&utm_term=' . urlencode($node->field_camp_term['und'][0]['value']);
-        $nexid = '&nexid=' . $campaign_nid;
-        $params = $utm_media . $utm_src . $utm_content . $utm_term . $nexid;
-        return $params;
+    $utm_media = '&utm_media=' . urlencode($node->field_camp_media['und'][0]['value']);
+    $utm_src = '&utm_src=' . urlencode($node->field_camp_src['und'][0]['value']);
+    $utm_content = '&utm_content=' . urlencode($node->field_camp_offer_txt['und'][0]['value']);
+    $utm_term = '&utm_term=' . urlencode($node->field_camp_term['und'][0]['value']);
+    $nexid = '&nexid=' . $campaign_nid;
+    $params = $utm_media . $utm_src . $utm_content . $utm_term . $nexid;
+    return $params;
 }
-/**
+
+/*
  * Implements hook_theme().
  */
 
@@ -341,7 +483,6 @@ function camp_landing_node_view($node, $view_mode) {
 
         );
         $form = drupal_get_form('campaign_landing_form', $vars);
-
         // Add the output to the node.
         $node->content['camp_landing'] = array(
             '#theme' => 'camp_landing_view',
@@ -380,6 +521,7 @@ function camp_landing_form_alter(&$form, &$form_state, $form_id){
  * @return
  * The numeric $vid or false if machine name not present.
  */
+
 function taxonomy_get_vid_from_machine_name($machine_name){
     $vid = false;
     $vocabs = taxonomy_get_vocabularies();
@@ -401,6 +543,7 @@ function campaign_landing_form_pick_action($form_values){
     return $action;
 }
 function campaign_landing_form($form, &$form_state, $vars){
+    
     /*
      * todo: give control of required fields during campaign creation
      */
