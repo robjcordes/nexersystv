@@ -954,3 +954,6 @@ padding-bottom:8px;
     margin-right:auto;
     margin-left:auto;
 }
+.breadcrumb{
+    display:none;
+}
