@@ -4,14 +4,19 @@ $(document).ready(function() {
     var phone;
     if(cookie != ''){
         cookie =     $.parseJSON(cookie);
-        if(cookie['campaign_phone']){
-            phone = cookie['campaign_phone'];
+        console.log(cookie);
+        if(cookie != null){
+            try{
+                params = cookie['campaign_params'];
+                params = params.substr(1); 
+                phone = cookie['campaign_phone'];
+            }catch(err){
+                //console.log(err);
+            }
+            
             $('.camp_landing_phone').html(phone);
             $('.panel-box dd').html(phone);
-        }
-        if(cookie['campaign_params']){
-            params = cookie['campaign_params'];
-            params = params.substr(1);
+
         }
     }
     $('.view-mode-full').append('<a href="#" onclick="camp_landing_delete_cookie();">Delete campaign cookie</a>');

@@ -217,13 +217,9 @@ function get_campaign_phone($campaign){
  */
 
 function campaign_landing_choose_campaign(){
-
     //has nexuid cookie set with campaign?
     $nexersystv_cookie = isset($_COOKIE['nexuid']) ? json_decode($_COOKIE['nexuid']) : false;
-
     if(isset($nexersystv_cookie->campaign_nid)){
-        //$nexersystv_cookie = json_decode($_COOKIE['nexuid']);
-        debug('campaign already set');
         $campaign = $nexersystv_cookie->campaign_nid;
     }elseif(!empty($_GET['nexid'])){
         //todo: chech to make sure this is a valid campaign!
