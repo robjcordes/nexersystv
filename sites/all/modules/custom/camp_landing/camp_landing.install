@@ -14,7 +14,7 @@ function camp_landing_update_7000(){
             'camp_data' => array(
                 'type' => 'text',
                 'not null' => FALSE,
-                'size' => 'tiny',
+                'size' => 'medium',
                 'description' => 'Campaign contents.',
       
             ),
@@ -25,6 +25,19 @@ function camp_landing_update_7000(){
 
 }
 
+function camp_landing_update_7001(){
+    //db_drop_primary_key('camp_landing_uid_stamp');
+    db_change_field('camp_landing_uid_stamp', 'camp_data', 'camp_data', 
+            array(
+                'type' => 'text',
+                'not null' => FALSE,
+                'size' => 'medium',
+                'description' => 'Campaign contents.',
+      
+            )
+            //array('primary key' => array('uid_stamp'),)
+            );
+}
 function camp_landing_install() {
     $t = get_t();
 

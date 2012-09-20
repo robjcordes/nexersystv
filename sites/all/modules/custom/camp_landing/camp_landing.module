@@ -228,9 +228,21 @@ function campaign_landing_choose_campaign(){
         }else{
             $campaign = variable_get('camp_default');
         }
+        $campaign_params = camp_landing_camp_url_params($campaign);
+        if(!isset($nexersystv_cookie->uid_stamp)){
+            $uid_stamp = false;
+        }else{
+            $uid_stamp = $nexersystv_cookie->uid_stamp;
+        }
         $campaign_phone = get_campaign_phone($campaign);
-        $campaign_array = array('campaign_nid' => $campaign, 'campaign_phone' => $campaign_phone);
-        setcookie('nexuid', json_encode($campaign_array), time() + (3600 * 12), '/');
+        $campaign_array = array(
+            'campaign_nid' => $campaign, 
+            'campaign_phone' => $campaign_phone,
+            'campaign_params' => $campaign_params,
+            'landing_time' => time(),
+            );
+
+        camp_landing_stamp_visitor($campaign_array, $uid_stamp);
     }else{
         $source_match = false;
         $campaign = variable_get('camp_default');
@@ -401,7 +413,7 @@ function camp_landing_stamp_visitor($campaign_array = NULL, $uid_stamp = false){
         $campaign_array['uid_stamp'] = $uid_stamp;
         $campaign_params = $campaign_array['campaign_params'];
         db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
-            $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
+            $jsToWrite = 'document.write("<img width="1px" height="1px" src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
             drupal_add_js($jsToWrite, 'inline');
     }elseif($uid_stamp && !is_null($campaign_array)){
         //retrieve the row you just inserted and update it to contain the auto increment uid_stamp in the serialized data
@@ -414,7 +426,7 @@ function camp_landing_stamp_visitor($campaign_array = NULL, $uid_stamp = false){
         $campaign_array['uid_stamp'] = $uid_stamp;
         $campaign_params = $campaign_array['campaign_params'];
         db_update('camp_landing_uid_stamp')->condition('uid_stamp', $uid_stamp)->fields(array('camp_data' => $data))->execute();
-            $jsToWrite = 'document.write("<img src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
+            $jsToWrite = 'document.write("<img width="1px" height="1px" src = \'http://nexersys.com/track.php?uid_stamp=' . $uid_stamp . '&nexinfo=' . $campaign_params . '\'/>")';
             drupal_add_js($jsToWrite, 'inline');
     }
 

@@ -6,12 +6,13 @@ $(document).ready(function() {
         cookie =     $.parseJSON(cookie);
         console.log(cookie);
         if(cookie != null){
+            console.log('not null cookie');
             try{
                 params = cookie['campaign_params'];
                 params = params.substr(1); 
                 phone = cookie['campaign_phone'];
             }catch(err){
-                //console.log(err);
+                console.log(err);
             }
             
             $('.camp_landing_phone').html(phone);
@@ -19,6 +20,8 @@ $(document).ready(function() {
 
         }
     }
+                    params = cookie['campaign_params'];
+
     $('.view-mode-full').append('<a href="#" onclick="camp_landing_delete_cookie();">Delete campaign cookie</a>');
     var logoLink = $('.logo a').attr('href');
     adjustedLogoLink = logoLink + '?' + params;
@@ -27,7 +30,7 @@ $(document).ready(function() {
 
         var test = $(this);
         test.children().each(function(e){
-    
+            console.log(params);
         var footerLink = $(this).children().attr('href');
         adjustedFooterLink = footerLink + '?' + params;
         $(this).children().attr('href', adjustedFooterLink);
