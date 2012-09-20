@@ -4,15 +4,15 @@ $(document).ready(function() {
     var phone;
     if(cookie != ''){
         cookie =     $.parseJSON(cookie);
-        console.log(cookie);
+        //console.log(cookie);
         if(cookie != null){
-            console.log('not null cookie');
+            //console.log('not null cookie');
             try{
                 params = cookie['campaign_params'];
                 params = params.substr(1); 
                 phone = cookie['campaign_phone'];
             }catch(err){
-                console.log(err);
+                //console.log(err);
             }
             
             $('.camp_landing_phone').html(phone);
@@ -30,7 +30,7 @@ $(document).ready(function() {
 
         var test = $(this);
         test.children().each(function(e){
-            console.log(params);
+            //console.log(params);
         var footerLink = $(this).children().attr('href');
         adjustedFooterLink = footerLink + '?' + params;
         $(this).children().attr('href', adjustedFooterLink);
@@ -47,7 +47,7 @@ $(document).ready(function() {
                              var modelTypeSelected = $('.company_control').val();
                              if(modelTypeSelected == 'Commercial'){
                                  $('.company_name').show();
-                                 console.log('selected com');
+                                 //console.log('selected com');
                              }else{
                                  
                                  $('.company_name').hide();
